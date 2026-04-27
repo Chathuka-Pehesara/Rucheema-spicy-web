@@ -1,0 +1,138 @@
+.dashboard-page {
+  padding: 160px 0 100px;
+  background-color: #fcfcfc;
+}
+
+.dashboard-container {
+  display: grid;
+  grid-template-columns: 280px 1fr;
+  gap: 3rem;
+}
+
+.dashboard-nav {
+  background-color: var(--color-white);
+  padding: 2.5rem;
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-sm);
+  height: fit-content;
+}
+
+.user-profile {
+  text-align: center;
+  margin-bottom: 3rem;
+}
+
+.user-profile img {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  margin-bottom: 1rem;
+}
+
+.user-profile span {
+  font-size: 0.75rem;
+  color: var(--color-secondary-dark);
+  font-weight: 700;
+  text-transform: uppercase;
+}
+
+.dashboard-nav ul li {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 1rem 0;
+  cursor: pointer;
+  color: var(--color-text-light);
+  font-weight: 500;
+  border-bottom: 1px solid #f9f9f9;
+}
+
+.dashboard-nav ul li.active, .dashboard-nav ul li:hover {
+  color: var(--color-primary);
+}
+
+.dashboard-nav ul li.logout {
+  margin-top: 2rem;
+  color: var(--color-error);
+}
+
+.dashboard-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  margin-bottom: 3rem;
+}
+
+.dashboard-header h2 {
+  font-size: 2rem;
+}
+
+.order-cards {
+  display: grid;
+  gap: 2rem;
+}
+
+.order-card {
+  background-color: var(--color-white);
+  padding: 2rem;
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-sm);
+}
+
+.order-top {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 1.5rem;
+}
+
+.order-id {
+  display: block;
+  font-weight: 700;
+  font-size: 1.1rem;
+}
+
+.order-date {
+  font-size: 0.85rem;
+  color: var(--color-text-light);
+}
+
+.order-status {
+  padding: 4px 12px;
+  border-radius: var(--radius-full);
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+}
+
+.order-status.shipped { background-color: #e3f2fd; color: #1976d2; }
+.order-status.delivered { background-color: #e8f5e9; color: #2e7d32; }
+
+.order-items-preview {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 1.5rem;
+}
+
+.order-items-preview img {
+  width: 60px;
+  height: 60px;
+  border-radius: var(--radius-sm);
+  object-fit: cover;
+}
+
+.order-bottom {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-top: 1.5rem;
+  border-top: 1px solid #f0f0f0;
+}
+
+.order-total {
+  font-weight: 700;
+}
+
+.btn-sm {
+  padding: 0.5rem 1rem;
+  font-size: 0.75rem;
+}

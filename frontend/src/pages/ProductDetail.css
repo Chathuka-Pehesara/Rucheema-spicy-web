@@ -1,0 +1,179 @@
+.product-detail-page {
+  padding: 160px 0 100px;
+}
+
+.detail-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 5rem;
+  margin-bottom: 80px;
+}
+
+.main-image {
+  height: 500px;
+  background-color: var(--color-bg-alt);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  margin-bottom: 1.5rem;
+}
+
+.main-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.thumb-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1rem;
+}
+
+.thumb-grid img {
+  width: 100%;
+  height: 100px;
+  object-fit: cover;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  border: 2px solid transparent;
+}
+
+.thumb-grid img.active {
+  border-color: var(--color-secondary);
+}
+
+.detail-cat {
+  text-transform: uppercase;
+  color: var(--color-secondary-dark);
+  font-weight: 600;
+  letter-spacing: 1px;
+}
+
+.detail-info h1 {
+  font-size: 3rem;
+  margin: 1rem 0;
+}
+
+.detail-meta {
+  display: flex;
+  gap: 2rem;
+  margin-bottom: 2rem;
+  color: var(--color-text-light);
+}
+
+.rating, .origin {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.detail-price {
+  font-size: 2.5rem;
+  font-weight: 700;
+  color: var(--color-primary);
+  margin-bottom: 2rem;
+}
+
+.detail-desc {
+  font-size: 1.1rem;
+  margin-bottom: 2.5rem;
+  line-height: 1.8;
+}
+
+.spice-lvl-box {
+  background-color: var(--color-bg-alt);
+  padding: 1.5rem;
+  border-radius: var(--radius-md);
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+  margin-bottom: 2.5rem;
+}
+
+.lvl-bars {
+  display: flex;
+  gap: 5px;
+}
+
+.lvl-bars .bar {
+  width: 30px;
+  height: 8px;
+  background-color: #ddd;
+  border-radius: 4px;
+}
+
+.lvl-bars .bar.active {
+  background-color: var(--color-primary);
+}
+
+.purchase-actions {
+  display: flex;
+  gap: 1.5rem;
+  align-items: center;
+  margin-bottom: 3rem;
+}
+
+.qty-selector {
+  display: flex;
+  align-items: center;
+  border: 1px solid #ddd;
+  border-radius: var(--radius-sm);
+  padding: 0.5rem;
+}
+
+.qty-selector button {
+  width: 30px;
+  height: 30px;
+  font-size: 1.2rem;
+}
+
+.qty-selector span {
+  width: 40px;
+  text-align: center;
+  font-weight: 600;
+}
+
+.add-to-cart {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+}
+
+.recipe-tease h3 {
+  font-size: 1.1rem;
+  margin-bottom: 0.5rem;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.recipes-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 2rem;
+}
+
+.recipe-card {
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  box-shadow: var(--shadow-sm);
+}
+
+.recipe-card img {
+  width: 100%;
+  height: 200px;
+  object-fit: cover;
+}
+
+.recipe-info {
+  padding: 1.5rem;
+  background-color: var(--color-white);
+}
+
+@media (max-width: 992px) {
+  .detail-grid {
+    grid-template-columns: 1fr;
+  }
+}

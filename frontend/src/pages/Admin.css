@@ -1,0 +1,146 @@
+.admin-page {
+  padding: 120px 0 100px;
+  background-color: #f4f6f8;
+  min-height: 100vh;
+}
+
+.admin-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 3rem;
+}
+
+.admin-header h1 {
+  font-size: 2.2rem;
+}
+
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1.5rem;
+  margin-bottom: 3rem;
+}
+
+.stat-card {
+  background-color: var(--color-white);
+  padding: 1.5rem;
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-sm);
+  display: flex;
+  align-items: center;
+  gap: 1.2rem;
+}
+
+.stat-icon {
+  width: 50px;
+  height: 50px;
+  border-radius: var(--radius-md);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.stat-info span {
+  font-size: 0.85rem;
+  color: var(--color-text-light);
+  display: block;
+}
+
+.stat-info h3 {
+  font-size: 1.4rem;
+  color: var(--color-text);
+  font-family: var(--font-body);
+}
+
+.admin-section {
+  background-color: var(--color-white);
+  padding: 2rem;
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-sm);
+  margin-bottom: 2rem;
+}
+
+.section-title {
+  margin-bottom: 2rem;
+}
+
+.table-container {
+  overflow-x: auto;
+}
+
+.admin-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.admin-table th {
+  text-align: left;
+  padding: 1rem;
+  background-color: #f9fafb;
+  font-size: 0.85rem;
+  text-transform: uppercase;
+  color: var(--color-text-light);
+}
+
+.admin-table td {
+  padding: 1rem;
+  border-bottom: 1px solid #f0f0f0;
+}
+
+.table-product {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.table-product img {
+  width: 40px;
+  height: 40px;
+  border-radius: var(--radius-sm);
+  object-fit: cover;
+}
+
+.status-badge {
+  padding: 4px 10px;
+  border-radius: var(--radius-full);
+  font-size: 0.7rem;
+  font-weight: 700;
+}
+
+.status-badge.in-stock { background-color: #e8f5e9; color: #2e7d32; }
+.status-badge.low-stock { background-color: #fff3e0; color: #ef6c00; }
+
+.orders-panel {
+  display: flex;
+  flex-direction: column;
+}
+
+.order-row {
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr 100px;
+  align-items: center;
+  padding: 1.5rem 0;
+  border-bottom: 1px solid #f0f0f0;
+}
+
+.order-main strong {
+  display: block;
+}
+
+.order-main span {
+  font-size: 0.85rem;
+  color: var(--color-text-light);
+}
+
+@media (max-width: 992px) {
+  .stats-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+@media (max-width: 576px) {
+  .stats-grid {
+    grid-template-columns: 1fr;
+  }
+}

@@ -1,0 +1,189 @@
+.shop-page {
+  padding-bottom: 100px;
+}
+
+.shop-header {
+  background-color: var(--color-primary-dark);
+  background-image: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)), url('https://images.unsplash.com/photo-1596040033229-a9821ebd058d?q=80&w=1600');
+  background-size: cover;
+  background-position: center;
+  padding: 160px 0 80px;
+  text-align: center;
+  color: white;
+  position: relative;
+}
+
+.discovery-badge {
+  display: inline-block;
+  background: var(--color-secondary);
+  color: var(--color-primary-dark);
+  padding: 5px 15px;
+  border-radius: var(--radius-full);
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  margin-bottom: 1.5rem;
+  animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+  0% { transform: scale(1); box-shadow: 0 0 0 0 rgba(212, 175, 55, 0.4); }
+  70% { transform: scale(1.05); box-shadow: 0 0 0 10px rgba(212, 175, 55, 0); }
+  100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(212, 175, 55, 0); }
+}
+
+.shop-header h1 {
+  font-size: clamp(2.5rem, 8vw, 4rem);
+  margin-bottom: 1.5rem;
+  color: white;
+}
+
+.shop-header h1 span {
+  color: var(--color-secondary);
+}
+
+.shop-header p {
+  max-width: 600px;
+  margin: 0 auto 3rem;
+  font-size: 1.1rem;
+  opacity: 0.9;
+}
+
+/* Flavor Wizard */
+.flavor-wizard {
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(15px);
+  padding: 2rem;
+  border-radius: var(--radius-lg);
+  max-width: 800px;
+  margin: 0 auto;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.flavor-wizard h3 {
+  color: white;
+  font-size: 1.1rem;
+  margin-bottom: 1.5rem;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.wizard-options {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.wizard-btn {
+  background: transparent;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  color: white;
+  padding: 10px 25px;
+  border-radius: var(--radius-full);
+  font-size: 0.9rem;
+  font-weight: 600;
+  transition: all 0.3s ease;
+}
+
+.wizard-btn:hover {
+  background: var(--color-secondary);
+  color: var(--color-primary-dark);
+  border-color: var(--color-secondary);
+  transform: translateY(-3px);
+}
+
+.shop-content {
+  display: grid;
+  grid-template-columns: 280px 1fr;
+  gap: 3rem;
+  padding-top: 60px;
+}
+
+.shop-sidebar {
+  position: sticky;
+  top: 100px;
+  height: fit-content;
+}
+
+.filter-group {
+  margin-bottom: 3rem;
+}
+
+.filter-group h3 {
+  font-size: 1.2rem;
+  margin-bottom: 1.5rem;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  border-bottom: 2px solid var(--color-secondary);
+  padding-bottom: 10px;
+  display: inline-block;
+}
+
+.filter-group ul li {
+  margin-bottom: 0.8rem;
+  cursor: pointer;
+  transition: var(--transition-fast);
+  color: var(--color-text-light);
+}
+
+.filter-group ul li:hover, .filter-group ul li.active {
+  color: var(--color-primary);
+  padding-left: 5px;
+}
+
+.price-filter input {
+  width: 100%;
+  accent-color: var(--color-primary);
+}
+
+.price-labels {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.85rem;
+  margin-top: 0.5rem;
+  color: var(--color-text-light);
+}
+
+.shop-controls {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2rem;
+}
+
+.search-bar {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background-color: var(--color-white);
+  padding: 0.8rem 1.5rem;
+  border-radius: var(--radius-full);
+  border: 1px solid #eee;
+  width: 400px;
+}
+
+.search-bar input {
+  border: none;
+  outline: none;
+  width: 100%;
+  font-family: inherit;
+}
+
+.sort-dropdown {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.9rem;
+  cursor: pointer;
+}
+
+@media (max-width: 992px) {
+  .shop-content {
+    grid-template-columns: 1fr;
+  }
+  .shop-sidebar {
+    display: none; /* In a real app, this would be a drawer */
+  }
+}

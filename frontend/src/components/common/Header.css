@@ -1,0 +1,148 @@
+.header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: var(--header-height);
+  display: flex;
+  align-items: center;
+  z-index: 1000;
+  transition: var(--transition-smooth);
+  background-color: transparent;
+}
+
+.header.scrolled {
+  background-color: rgba(255, 253, 245, 0.95);
+  backdrop-filter: blur(10px);
+  height: 70px;
+  box-shadow: var(--shadow-md);
+}
+
+.header-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+}
+
+.logo {
+  font-family: var(--font-heading);
+  font-size: 1.8rem;
+  font-weight: 800;
+  letter-spacing: 2px;
+  color: var(--color-primary-dark);
+}
+
+.logo span {
+  color: var(--color-secondary-dark);
+  font-weight: 400;
+}
+
+.nav-menu ul {
+  display: flex;
+  gap: 2.5rem;
+}
+
+.nav-menu a {
+  font-weight: 500;
+  font-size: 0.9rem;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  position: relative;
+  padding-bottom: 5px;
+}
+
+.nav-menu a::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 0;
+  height: 2px;
+  background-color: var(--color-secondary);
+  transition: var(--transition-fast);
+}
+
+.nav-menu a:hover::after,
+.nav-menu a.active::after {
+  width: 100%;
+}
+
+.header-actions {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+}
+
+.action-btn {
+  color: var(--color-text);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+}
+
+.action-btn:hover {
+  color: var(--color-primary);
+  transform: translateY(-2px);
+}
+
+.cart-btn .cart-count,
+.action-btn .action-badge {
+  position: absolute;
+  top: -8px;
+  right: -8px;
+  background-color: var(--color-primary);
+  color: white;
+  font-size: 0.7rem;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  border: 2px solid var(--color-bg);
+}
+
+.action-btn .action-badge {
+  background-color: var(--color-secondary-dark);
+}
+
+.mobile-menu-btn {
+  display: none;
+  cursor: pointer;
+}
+
+@media (max-width: 992px) {
+  .nav-menu {
+    position: fixed;
+    top: 0;
+    left: -100%;
+    width: 80%;
+    height: 100vh;
+    background-color: var(--color-bg);
+    display: flex;
+    flex-direction: column;
+    padding: 100px 2rem;
+    transition: var(--transition-smooth);
+    box-shadow: var(--shadow-lg);
+  }
+
+  .nav-menu.active {
+    left: 0;
+  }
+
+  .nav-menu ul {
+    flex-direction: column;
+    gap: 2rem;
+  }
+
+  .mobile-menu-btn {
+    display: block;
+  }
+  
+  .logo {
+    font-size: 1.4rem;
+  }
+}
