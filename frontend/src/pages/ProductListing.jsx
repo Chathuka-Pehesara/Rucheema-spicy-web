@@ -1,20 +1,42 @@
-import React, { useState } from 'react';
+import React, { useState, useMemo } from 'react';
 import ProductCard from '../components/product/ProductCard';
 import { SPICES_DATA } from '../utils/mockData';
-import { Search, Filter, ChevronDown } from 'lucide-react';
+import { Search, ChevronDown, Flame, RotateCcw } from 'lucide-react';
 import './ProductListing.css';
 
 const ProductListing = () => {
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('All');
+  const [maxPrice, setMaxPrice] = useState(100);
+  const [selectedSpices, setSelectedSpices] = useState([]);
 
   const categories = ['All', 'Whole Spices', 'Artisanal Powders', 'Rare Exotics'];
 
-  const filteredProducts = SPICES_DATA.filter(product => {
-    const matchesSearch = product.name.toLowerCase().includes(searchQuery.toLowerCase());
-    const matchesCategory = selectedCategory === 'All' || product.category === selectedCategory;
-    return matchesSearch && matchesCategory;
-  });
+  const toggleSpiceLevel = (level) => {
+    setSelectedSpices(prev => 
+      prev.includes(level) ? prev.filter(l => l !== level) : [...prev, level]
+    );
+  };
+
+  const filteredProducts = useMemo(() => {
+    return SPICES_DATA.filter(product => {
+      const matchesSearch = product.name.toLowerCase().includes(searchQuery.toLowerCase()) || 
+                           product.description.toLowerCase().includes(searchQuery.toLowerCase()) ||
+                           product.origin.toLowerCase().includes(searchQuery.toLowerCase());
+      const matchesCategory = selectedCategory === 'All' || product.category === selectedCategory;
+      const matchesPrice = product.price <= maxPrice;
+      const matchesSpice = selectedSpices.length === 0 || selectedSpices.includes(product.spiceLevel);
+      
+      return matchesSearch && matchesCategory && matchesPrice && matchesSpice;
+    });
+  }, [searchQuery, selectedCategory, maxPrice, selectedSpices]);
+
+  const clearFilters = () => {
+    setSearchQuery('');
+    setSelectedCategory('All');
+    setMaxPrice(100);
+    setSelectedSpices([]);
+  };
 
   return (
     <div className="shop-page">
@@ -31,8 +53,8 @@ const ProductListing = () => {
               {['Smoky', 'Floral', 'Intense Heat', 'Zesty', 'Earthy'].map(flavor => (
                 <button 
                   key={flavor} 
-                  className="wizard-btn"
-                  onClick={() => setSearchQuery(flavor)}
+                  className={`wizard-btn ${searchQuery === flavor ? 'active' : ''}`}
+                  onClick={() => setSearchQuery(flavor === searchQuery ? '' : flavor)}
                 >
                   {flavor}
                 </button>
@@ -44,9 +66,16 @@ const ProductListing = () => {
 
       <div className="container shop-content">
         <aside className="shop-sidebar">
+          <div className="filter-header-main">
+            <h3>Refine Selection</h3>
+            <button className="reset-btn" onClick={clearFilters}>
+              <RotateCcw size={14} /> Clear All
+            </button>
+          </div>
+
           <div className="filter-group">
             <h3>Categories</h3>
-            <ul>
+            <ul className="category-list">
               {categories.map(cat => (
                 <li 
                   key={cat} 
@@ -54,16 +83,29 @@ const ProductListing = () => {
                   onClick={() => setSelectedCategory(cat)}
                 >
                   {cat}
+                  <span className="count">
+                    {SPICES_DATA.filter(p => cat === 'All' || p.category === cat).length}
+                  </span>
                 </li>
               ))}
             </ul>
           </div>
 
           <div className="filter-group">
-            <h3>Price Range</h3>
+            <div className="filter-title-row">
+              <h3>Budget Range</h3>
+              <span className="current-val">Up to ${maxPrice}</span>
+            </div>
             <div className="price-filter">
-              <input type="range" min="0" max="100" />
-              <div className="price-labels">
+              <input 
+                type="range" 
+                min="0" 
+                max="100" 
+                value={maxPrice}
+                onChange={(e) => setMaxPrice(parseInt(e.target.value))}
+                className="custom-range"
+              />
+              <div className="price-range-labels">
                 <span>$0</span>
                 <span>$100</span>
               </div>
@@ -71,46 +113,61 @@ const ProductListing = () => {
           </div>
 
           <div className="filter-group">
-            <h3>Spice Level</h3>
-            <div className="spice-lvl-filter">
+            <h3>Spice Intensity</h3>
+            <div className="spice-lvl-filter-new">
               {[1, 2, 3, 4, 5].map(lvl => (
-                <label key={lvl} className="checkbox-container">
-                  Level {lvl}
-                  <input type="checkbox" />
-                  <span className="checkmark"></span>
-                </label>
+                <button 
+                  key={lvl} 
+                  className={`spice-btn ${selectedSpices.includes(lvl) ? 'active' : ''}`}
+                  onClick={() => toggleSpiceLevel(lvl)}
+                >
+                  <div className="flame-container">
+                    {[...Array(lvl)].map((_, i) => (
+                      <Flame 
+                        key={i} 
+                        size={14} 
+                        className={selectedSpices.includes(lvl) ? 'flicker' : ''}
+                        fill={selectedSpices.includes(lvl) ? "currentColor" : "none"} 
+                      />
+                    ))}
+                  </div>
+                  <span>Heat Level {lvl}</span>
+                </button>
               ))}
             </div>
           </div>
         </aside>
 
         <main className="shop-main">
-          <div className="shop-controls">
-            <div className="search-bar">
+          <div className="shop-controls-premium">
+            <div className="search-bar-new">
               <Search size={18} />
               <input 
                 type="text" 
-                placeholder="Search spices..." 
+                placeholder="Search by spice, origin, or flavor..." 
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
               />
             </div>
-            <div className="sort-dropdown">
-              <span>Sort by: Popularity</span>
-              <ChevronDown size={16} />
+            <div className="results-badge">
+              <strong>{filteredProducts.length}</strong> Spices Matching
             </div>
           </div>
 
           <div className="products-grid">
-            {filteredProducts.map(product => (
-              <ProductCard key={product.id} product={product} />
+            {filteredProducts.map((product, index) => (
+              <div key={product.id} className="grid-item-reveal" style={{ animationDelay: `${index * 0.05}s` }}>
+                <ProductCard product={product} />
+              </div>
             ))}
           </div>
 
           {filteredProducts.length === 0 && (
-            <div className="no-results">
-              <p>No spices found matching your criteria.</p>
-              <button className="btn-link" onClick={() => {setSearchQuery(''); setSelectedCategory('All');}}>Clear Filters</button>
+            <div className="no-results-premium">
+              <div className="no-results-icon">🌶️</div>
+              <h3>No Matches Found</h3>
+              <p>Your current filters didn't return any spices. Try clearing some selections.</p>
+              <button className="btn-premium" onClick={clearFilters}>Reset Filters</button>
             </div>
           )}
         </main>
