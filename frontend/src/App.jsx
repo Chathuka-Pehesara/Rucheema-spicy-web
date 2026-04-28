@@ -12,6 +12,7 @@ import Business from './pages/Business';
 import About from './pages/About';
 import AIChatbot from './components/chatbot/AIChatbot';
 import CustomCursor from './components/common/CustomCursor';
+import ScrollToTop from './components/common/ScrollToTop';
 
 import { ShopProvider } from './context/ShopContext';
 
@@ -19,6 +20,7 @@ function App() {
   return (
     <ShopProvider>
       <Router>
+        <ScrollToTop />
         <div className="app">
           <CustomCursor />
           <Header />
