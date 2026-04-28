@@ -1,0 +1,95 @@
+.custom-cursor-dot {
+  width: 8px;
+  height: 8px;
+  background-color: var(--color-primary);
+  border-radius: 50%;
+  position: fixed;
+  pointer-events: none;
+  z-index: 9999;
+  transform: translate(-50%, -50%);
+  transition: width 0.3s ease, height 0.3s ease, background-color 0.3s ease;
+}
+
+.custom-cursor-ring {
+  width: 40px;
+  height: 40px;
+  border: 1.5px solid var(--color-primary);
+  border-radius: 50%;
+  position: fixed;
+  pointer-events: none;
+  z-index: 9998;
+  transform: translate(-50%, -50%);
+  transition: all 0.4s cubic-bezier(0.19, 1, 0.22, 1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Hovering Interactive Elements */
+.custom-cursor-ring.hovered {
+  width: 60px;
+  height: 60px;
+  background-color: rgba(139, 0, 0, 0.1);
+  border-color: transparent;
+}
+
+.custom-cursor-dot.hovered {
+  width: 12px;
+  height: 12px;
+  background-color: var(--color-secondary);
+}
+
+/* Clicking State */
+.custom-cursor-ring.clicking {
+  width: 30px;
+  height: 30px;
+  background-color: rgba(139, 0, 0, 0.3);
+}
+
+.custom-cursor-dot.clicking {
+  transform: translate(-50%, -50%) scale(0.5);
+}
+
+/* Special State (e.g. data-cursor="View") */
+.custom-cursor-ring.special {
+  width: 100px;
+  height: 100px;
+  background-color: var(--color-primary-dark);
+  border-color: var(--color-secondary);
+  border-width: 2px;
+}
+
+.custom-cursor-dot.special {
+  opacity: 0;
+}
+
+.cursor-text {
+  color: var(--color-secondary);
+  font-size: 0.75rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  animation: fadeIn 0.3s ease;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: scale(0.8); }
+  to { opacity: 1; transform: scale(1); }
+}
+
+/* Hide default cursor only if on a device with a pointing device */
+@media (pointer: fine) {
+  body, a, button, input, textarea {
+    cursor: none !important;
+  }
+}
+
+/* Fallback for mobile */
+@media (max-width: 1024px) {
+  .custom-cursor-dot, .custom-cursor-ring {
+    display: none;
+  }
+  body, a, button, input, textarea {
+    cursor: auto !important;
+  }
+}
