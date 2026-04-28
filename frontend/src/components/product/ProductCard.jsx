@@ -1,12 +1,29 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { ShoppingBag, Star, Heart } from 'lucide-react';
+import { ShoppingBag, Star, Heart, Flame } from 'lucide-react';
 import { useShop } from '../../context/ShopContext';
 import './ProductCard.css';
 
 const ProductCard = ({ product }) => {
   const { addToCart, toggleWishlist, wishlist } = useShop();
   const isWishlisted = wishlist.find(item => item.id === product.id);
+
+  const renderSpiceLevel = (level) => {
+    if (!level || level === 0) return null;
+    
+    return (
+      <div className="spice-badge" title={`Spice Level: ${level}`}>
+        {[...Array(level)].map((_, i) => (
+          <Flame 
+            key={i} 
+            size={16} 
+            className="spice-flame-icon" 
+            style={{ animationDelay: `${i * 0.15}s` }}
+          />
+        ))}
+      </div>
+    );
+  };
 
   return (
     <div className="product-card">
@@ -28,11 +45,11 @@ const ProductCard = ({ product }) => {
             <ShoppingBag size={18} />
           </button>
         </div>
-        <div className="spice-badge">Spice Lvl: {product.spiceLevel}</div>
+        {renderSpiceLevel(product.spiceLevel)}
       </div>
       <div className="product-info">
         <span className="product-cat">{product.category}</span>
-        <h3 className="product-name">
+        <h3 className="product-name" title={product.name}>
           <Link to={`/product/${product.id}`}>{product.name}</Link>
         </h3>
         <div className="product-meta">
