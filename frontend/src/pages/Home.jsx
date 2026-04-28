@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import Hero from '../components/home/Hero';
 import FeaturedProducts from '../components/home/FeaturedProducts';
 import SpiceFinder from '../components/home/SpiceFinder';
-import { ShieldCheck, Truck, RotateCcw, Award } from 'lucide-react';
+import { ShieldCheck, Truck, RotateCcw, Award, CheckCircle } from 'lucide-react';
 import { SPICES_DATA, CATEGORIES, SUBSCRIPTION_PLANS } from '../utils/mockData';
 import './Home.css';
 
@@ -76,8 +76,8 @@ const Home = () => {
             {SUBSCRIPTION_PLANS.map((plan) => (
               <div key={plan.id} className={`sub-package-card ${plan.featured ? 'featured' : ''}`}>
                 {plan.featured && <div className="featured-badge">Most Popular</div>}
-                <div className="package-header" style={{ borderBottomColor: plan.color }}>
-                  <h3 style={{ color: plan.color }}>{plan.name}</h3>
+                <div className="package-header">
+                  <h3>{plan.name}</h3>
                   <div className="package-price">
                     <span className="currency">$</span>
                     <span className="amount">{plan.price}</span>
@@ -86,12 +86,14 @@ const Home = () => {
                 </div>
                 <ul className="package-features">
                   {plan.features.map((feature, i) => (
-                    <li key={i}>{feature}</li>
+                    <li key={i}>
+                      <CheckCircle size={18} className="feature-icon" />
+                      {feature}
+                    </li>
                   ))}
                 </ul>
                 <button 
-                  className={`btn-${plan.featured ? 'premium' : 'outline'}`}
-                  style={!plan.featured ? { color: plan.color, borderColor: plan.color } : {}}
+                  className={plan.featured ? 'btn-premium' : 'btn-outline'}
                 >
                   Select Plan
                 </button>
