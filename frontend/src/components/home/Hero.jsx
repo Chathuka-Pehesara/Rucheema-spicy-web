@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import './Hero.css';
 import heroBg from '../../assets/hero-bg.png';
 
@@ -16,8 +17,8 @@ const Hero = () => {
           Elevate your culinary journey with Richeema's premium collection.
         </p>
         <div className="hero-btns fade-in" style={{ animationDelay: '0.4s' }}>
-          <button className="btn-premium">Shop Collection</button>
-          <button className="btn-outline" style={{ borderColor: 'white', color: 'white' }}>Our Story</button>
+          <Link to="/collections" className="btn-premium">Shop Collection</Link>
+          <Link to="/about" className="btn-outline" style={{ borderColor: 'white', color: 'white', textDecoration: 'none' }}>Our Story</Link>
         </div>
       </div>
     </section>

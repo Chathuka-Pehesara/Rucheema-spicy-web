@@ -9,6 +9,7 @@ import Cart from './pages/Cart';
 import Dashboard from './pages/Dashboard';
 import Admin from './pages/Admin';
 import Business from './pages/Business';
+import About from './pages/About';
 import AIChatbot from './components/chatbot/AIChatbot';
 
 import { ShopProvider } from './context/ShopContext';
@@ -22,6 +23,7 @@ function App() {
           <main>
             <Routes>
               <Route path="/" element={<Home />} />
+              <Route path="/about" element={<About />} />
               <Route path="/collections" element={<ProductListing />} />
               <Route path="/product/:id" element={<ProductDetail />} />
               <Route path="/cart" element={<Cart />} />
