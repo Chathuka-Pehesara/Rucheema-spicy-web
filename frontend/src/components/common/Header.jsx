@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
-import { ShoppingCart, Search, User, Menu, X, Heart, LogOut, LayoutDashboard, Shield } from 'lucide-react';
+import { ShoppingCart, Search, User, Menu, X, Heart, LogOut, LayoutDashboard, Shield, Settings as SettingsIcon } from 'lucide-react';
 import { useShop } from '../../context/ShopContext';
 import { useAuth } from '../../context/AuthContext';
 import './Header.css';
@@ -92,10 +92,15 @@ const Header = () => {
                     <User size={18} /> My Profile
                   </Link>
                   
-                  {user.role === 'admin' && (
-                    <Link to="/admin" className="dropdown-item" onClick={() => setIsProfileOpen(false)}>
-                      <Shield size={18} /> Admin Panel
-                    </Link>
+                  {(user.role === 'admin' || user.role === 'owner') && (
+                    <>
+                      <Link to="/admin" className="dropdown-item" onClick={() => setIsProfileOpen(false)}>
+                        <Shield size={18} /> Admin Panel
+                      </Link>
+                      <Link to="/settings" className="dropdown-item" onClick={() => setIsProfileOpen(false)}>
+                        <SettingsIcon size={18} /> Global Settings
+                      </Link>
+                    </>
                   )}
                   
                   {user.role === 'owner' && (
