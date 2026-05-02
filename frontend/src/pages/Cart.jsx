@@ -160,10 +160,31 @@ const Cart = () => {
                     <span>Curation Subtotal</span>
                     <span>${subtotal.toFixed(2)}</span>
                   </div>
+                  
                   <div className="summary-line">
-                    <span>Artisanal Shipping</span>
-                    <span>{shipping === 0 ? <span className="free-tag">Complimentary</span> : `$${shipping.toFixed(2)}`}</span>
+                    <span>{user?.country === 'Sri Lanka' ? 'Delivery Fee' : 'Shipment Fee'}</span>
+                    <span>${shipping.toFixed(2)}</span>
                   </div>
+
+                  {settings && user && (
+                    <div className="shipping-detail-box">
+                      <div className="detail-label">
+                        <Package size={12} /> Logistics Breakdown
+                      </div>
+                      <span className="detail-calc">
+                        {calculateDistance(
+                          settings.baseLocation.city,
+                          settings.baseLocation.country,
+                          user.city,
+                          user.country
+                        )} km distance from dispatch center
+                      </span>
+                      <span className="detail-calc">
+                        Rate: ${user.country === 'Sri Lanka' ? settings.shippingRates.localPerKm : settings.shippingRates.internationalPerKm} per km
+                      </span>
+                    </div>
+                  )}
+
                   <div className="summary-line">
                     <span>Luxury Tax (8%)</span>
                     <span>${tax.toFixed(2)}</span>
@@ -178,7 +199,7 @@ const Cart = () => {
                   Proceed to Secure Checkout
                 </button>
                 <div className="secure-footer">
-                  <ShieldCheck size={16} /> <span>Secured by Tier-1 Encryption</span>
+                  <ShieldCheck size={14} /> <span>Secured by Tier-1 Encryption</span>
                 </div>
               </aside>
             </div>
