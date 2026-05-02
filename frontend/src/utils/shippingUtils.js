@@ -1,20 +1,40 @@
-// Mock function to get distance between two points
-// In a real app, you'd use Google Maps Distance Matrix API or Haversine formula with lat/lng
+// Mock city distances from Colombo (Source)
+const SL_CITY_DISTANCES = {
+  'Colombo': 0,
+  'Dehiwala': 10,
+  'Kotte': 12,
+  'Kandy': 115,
+  'Galle': 125,
+  'Jaffna': 395,
+  'Negombo': 38,
+  'Anuradhapura': 200,
+  'Ratnapura': 100,
+  'Matara': 160,
+};
+
 export const calculateDistance = (fromCity, fromCountry, toCity, toCountry) => {
   if (fromCountry === toCountry && fromCity === toCity) return 0;
   
-  // Basic mock distances
+  if (fromCountry === 'Sri Lanka' && toCountry === 'Sri Lanka') {
+    // If it's SL, try to get distance from our table
+    const d1 = SL_CITY_DISTANCES[fromCity] || 0;
+    const d2 = SL_CITY_DISTANCES[toCity] || 50; // Default 50km if city not in table
+    return Math.abs(d1 - d2);
+  }
+  
+  // Basic mock distances for international
   if (fromCountry !== toCountry) {
-    // International
     return 5000; // Flat 5000km for international mock
   }
   
-  // Same country (e.g. Sri Lanka)
-  return 50; // Flat 50km for local mock if cities differ
+  return 50; 
 };
 
 export const calculateShippingFee = (distance, rates, isLocal) => {
-  if (isLocal) return 0; // Sri Lanka is free as per user request
+  if (isLocal) {
+    const { localBase, localPerKm } = rates;
+    return localBase + (distance * localPerKm);
+  }
   
   const { internationalBase, internationalPerKm } = rates;
   return internationalBase + (distance * internationalPerKm);

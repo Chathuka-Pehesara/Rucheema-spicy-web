@@ -48,12 +48,55 @@ const Cart = () => {
   const tax = subtotal * 0.08;
   const total = subtotal + shipping + tax;
 
-  const handleProcessPayment = () => {
+  const handleProcessPayment = async () => {
     setCheckoutStep('processing');
-    setTimeout(() => {
-      setCheckoutStep('success');
-      clearCart();
-    }, 2500);
+    
+    try {
+      const orderData = {
+        orderItems: cart.map(item => ({
+          name: item.name,
+          qty: item.quantity,
+          image: item.image,
+          price: item.price,
+          product: item.id
+        })),
+        shippingAddress: {
+          address: user.town,
+          city: user.city,
+          country: user.country,
+          postalCode: '00000'
+        },
+        paymentMethod: 'Credit Card',
+        itemsPrice: subtotal,
+        taxPrice: tax,
+        shippingPrice: shipping,
+        totalPrice: total,
+      };
+
+      const response = await fetch('http://localhost:5000/api/orders', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${user.token}`,
+        },
+        body: JSON.stringify(orderData),
+      });
+
+      if (response.ok) {
+        setTimeout(() => {
+          setCheckoutStep('success');
+          clearCart();
+        }, 1500);
+      } else {
+        const error = await response.json();
+        alert(`Order failed: ${error.message}`);
+        setCheckoutStep('payment');
+      }
+    } catch (err) {
+      console.error(err);
+      alert('An error occurred during payment processing.');
+      setCheckoutStep('payment');
+    }
   };
 
   if (cart.length === 0 && checkoutStep !== 'success') {

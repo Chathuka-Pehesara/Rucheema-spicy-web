@@ -92,6 +92,21 @@ const Settings = () => {
                 </div>
               </div>
               <div className="input-group">
+                <label>Local Per Km ($)</label>
+                <div className="input-wrapper">
+                  <Truck size={18} />
+                  <input 
+                    type="number" 
+                    step="0.01"
+                    value={settings.shippingRates.localPerKm}
+                    onChange={(e) => setSettings({
+                      ...settings, 
+                      shippingRates: { ...settings.shippingRates, localPerKm: Number(e.target.value) }
+                    })}
+                  />
+                </div>
+              </div>
+              <div className="input-group">
                 <label>Local Base Fee ($)</label>
                 <div className="input-wrapper">
                   <MapPin size={18} />

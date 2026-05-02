@@ -5,7 +5,8 @@ const settingsSchema = mongoose.Schema(
     shippingRates: {
       internationalBase: { type: Number, default: 50 },
       internationalPerKm: { type: Number, default: 0.5 },
-      localBase: { type: Number, default: 0 }, // Sri Lanka is free
+      localBase: { type: Number, default: 0 },
+      localPerKm: { type: Number, default: 2 }, // Default $2 per km in SL
     },
     baseLocation: {
       city: { type: String, default: 'Colombo' },

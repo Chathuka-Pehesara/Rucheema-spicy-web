@@ -5,6 +5,9 @@ import { Mail, Lock, Eye, EyeOff, ArrowRight, ShieldCheck, User, Users, Briefcas
 import './Register.css';
 
 const Register = () => {
+  const SL_CITIES = ['Colombo', 'Dehiwala', 'Kotte', 'Kandy', 'Galle', 'Jaffna', 'Negombo', 'Anuradhapura', 'Ratnapura', 'Matara'];
+  const COUNTRIES = ['Sri Lanka', 'United Kingdom', 'United States', 'Australia', 'Canada', 'Other'];
+
   const [role, setRole] = useState('user');
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
@@ -125,16 +128,46 @@ const Register = () => {
             </div>
 
             <div className="form-group-premium">
+              <label>Country</label>
+              <div className="input-wrapper-premium">
+                <MapPin className="input-icon" size={18} />
+                <select
+                  value={country}
+                  onChange={(e) => {
+                    setCountry(e.target.value);
+                    if (e.target.value !== 'Sri Lanka') setCity('');
+                  }}
+                  className="select-premium-lux"
+                  required
+                >
+                  {COUNTRIES.map(c => <option key={c} value={c}>{c}</option>)}
+                </select>
+              </div>
+            </div>
+
+            <div className="form-group-premium">
               <label>City</label>
               <div className="input-wrapper-premium">
                 <MapPin className="input-icon" size={18} />
-                <input
-                  type="text"
-                  placeholder="Colombo"
-                  value={city}
-                  onChange={(e) => setCity(e.target.value)}
-                  required
-                />
+                {country === 'Sri Lanka' ? (
+                  <select
+                    value={city}
+                    onChange={(e) => setCity(e.target.value)}
+                    className="select-premium-lux"
+                    required
+                  >
+                    <option value="">Select City</option>
+                    {SL_CITIES.map(c => <option key={c} value={c}>{c}</option>)}
+                  </select>
+                ) : (
+                  <input
+                    type="text"
+                    placeholder="Enter City"
+                    value={city}
+                    onChange={(e) => setCity(e.target.value)}
+                    required
+                  />
+                )}
               </div>
             </div>
 
@@ -147,20 +180,6 @@ const Register = () => {
                   placeholder="Dehiwala"
                   value={town}
                   onChange={(e) => setTown(e.target.value)}
-                  required
-                />
-              </div>
-            </div>
-
-            <div className="form-group-premium">
-              <label>Country</label>
-              <div className="input-wrapper-premium">
-                <MapPin className="input-icon" size={18} />
-                <input
-                  type="text"
-                  placeholder="Sri Lanka"
-                  value={country}
-                  onChange={(e) => setCountry(e.target.value)}
                   required
                 />
               </div>

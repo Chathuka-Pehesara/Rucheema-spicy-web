@@ -1,13 +1,36 @@
 import React, { createContext, useState, useContext, useEffect } from 'react';
+import { useAuth } from './AuthContext';
 
 const ShopContext = createContext();
 
 export const useShop = () => useContext(ShopContext);
 
 export const ShopProvider = ({ children }) => {
+  const { user } = useAuth();
   const [cart, setCart] = useState([]);
   const [wishlist, setWishlist] = useState([]);
   const [notification, setNotification] = useState(null);
+
+  // Load user-specific cart from localStorage
+  useEffect(() => {
+    if (user) {
+      const savedCart = localStorage.getItem(`spice_cart_${user._id}`);
+      if (savedCart) {
+        setCart(JSON.parse(savedCart));
+      } else {
+        setCart([]);
+      }
+    } else {
+      setCart([]); // Clear cart if no user
+    }
+  }, [user]);
+
+  // Save cart to localStorage whenever it changes
+  useEffect(() => {
+    if (user) {
+      localStorage.setItem(`spice_cart_${user._id}`, JSON.stringify(cart));
+    }
+  }, [cart, user]);
 
   const showNotification = (message) => {
     setNotification(message);
@@ -15,6 +38,10 @@ export const ShopProvider = ({ children }) => {
   };
 
   const addToCart = (product, quantity = 1) => {
+    if (!user) {
+      showNotification("Please log in to add items to cart.");
+      return;
+    }
     setCart(prev => {
       const existing = prev.find(item => item.id === product.id);
       if (existing) {
@@ -41,6 +68,13 @@ export const ShopProvider = ({ children }) => {
     }));
   };
 
+  const clearCart = () => {
+    setCart([]);
+    if (user) {
+      localStorage.removeItem(`spice_cart_${user._id}`);
+    }
+  };
+
   const toggleWishlist = (product) => {
     setWishlist(prev => {
       const exists = prev.find(item => item.id === product.id);
@@ -63,6 +97,7 @@ export const ShopProvider = ({ children }) => {
       addToCart,
       removeFromCart,
       updateQuantity,
+      clearCart,
       toggleWishlist,
       cartCount,
       cartTotal,

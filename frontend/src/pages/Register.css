@@ -169,3 +169,21 @@
   font-weight: 800;
   margin-left: 8px;
 }
+
+.select-premium-lux {
+  width: 100%;
+  padding: 14px 20px 14px 45px;
+  background: white;
+  border: 1.5px solid #eee;
+  border-radius: 15px;
+  font-size: 0.95rem;
+  font-weight: 600;
+  transition: all 0.3s ease;
+  appearance: none;
+  cursor: pointer;
+}
+
+.select-premium-lux:focus {
+  border-color: #d4af37;
+  outline: none;
+}
