@@ -1,16 +1,27 @@
 import React, { useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import { SPICES_DATA } from '../utils/mockData';
 import { Star, Heart, ShoppingBag, MapPin, Flame, Leaf } from 'lucide-react';
 import { useShop } from '../context/ShopContext';
+import { useAuth } from '../context/AuthContext';
 import './ProductDetail.css';
 
 const ProductDetail = () => {
   const { id } = useParams();
+  const navigate = useNavigate();
   const product = SPICES_DATA.find(p => p.id === parseInt(id)) || SPICES_DATA[0];
   const [quantity, setQuantity] = useState(1);
   const { addToCart, toggleWishlist, wishlist } = useShop();
+  const { user } = useAuth();
   const isWishlisted = wishlist.find(item => item.id === product.id);
+
+  const handleAction = (action, ...args) => {
+    if (!user) {
+      navigate('/login');
+      return;
+    }
+    action(...args);
+  };
 
   return (
     <div className="product-detail-page">
@@ -67,13 +78,13 @@ const ProductDetail = () => {
               </div>
               <button 
                 className="btn-premium add-to-cart" 
-                onClick={() => addToCart(product, quantity)}
+                onClick={() => handleAction(addToCart, product, quantity)}
               >
                 <ShoppingBag size={20} /> Add to Cart
               </button>
               <button 
                 className={`wishlist-btn ${isWishlisted ? 'active' : ''}`}
-                onClick={() => toggleWishlist(product)}
+                onClick={() => handleAction(toggleWishlist, product)}
               >
                 <Heart size={24} fill={isWishlisted ? 'var(--color-primary)' : 'none'} />
               </button>

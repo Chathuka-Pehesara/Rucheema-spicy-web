@@ -1,13 +1,26 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import Hero from '../components/home/Hero';
 import FeaturedProducts from '../components/home/FeaturedProducts';
 import SpiceFinder from '../components/home/SpiceFinder';
 import { ShieldCheck, Truck, RotateCcw, Award, CheckCircle } from 'lucide-react';
 import { SPICES_DATA, CATEGORIES, SUBSCRIPTION_PLANS } from '../utils/mockData';
+import { useAuth } from '../context/AuthContext';
 import './Home.css';
 
 const Home = () => {
+  const { user } = useAuth();
+  const navigate = useNavigate();
+
+  const handleSubscribe = () => {
+    if (!user) {
+      navigate('/login');
+    } else {
+      // Logic for authenticated subscription if any
+      alert('Subscription feature coming soon!');
+    }
+  };
+
   return (
     <div className="home-page">
       <Hero />
@@ -94,6 +107,7 @@ const Home = () => {
                 </ul>
                 <button 
                   className={plan.featured ? 'btn-premium' : 'btn-outline'}
+                  onClick={handleSubscribe}
                 >
                   Select Plan
                 </button>

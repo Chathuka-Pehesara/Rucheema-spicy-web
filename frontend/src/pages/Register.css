@@ -1,0 +1,171 @@
+.register-page {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: radial-gradient(circle at top right, #fff, #f8f8f8);
+  position: relative;
+  overflow: hidden;
+  font-family: 'Outfit', sans-serif;
+  padding: 40px 20px;
+}
+
+.register-bg-overlay {
+  position: absolute;
+  top: 0; left: 0; width: 100%; height: 100%;
+  background: url('https://www.transparenttextures.com/patterns/cubes.png');
+  opacity: 0.03;
+  pointer-events: none;
+}
+
+.register-card {
+  width: 100%;
+  max-width: 600px;
+  background: rgba(255, 255, 255, 0.85);
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.5);
+  border-radius: 40px;
+  padding: 3rem;
+  box-shadow: 0 30px 60px rgba(0,0,0,0.12);
+  z-index: 10;
+  animation: cardEntrance 1s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@keyframes cardEntrance {
+  from { opacity: 0; transform: translateY(40px) scale(0.95); }
+  to { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+.register-brand-luxury {
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+.register-brand-luxury h1 {
+  font-family: 'Playfair Display', serif;
+  font-size: 2.2rem;
+  color: #120907;
+  margin-bottom: 0.5rem;
+}
+
+.register-brand-luxury h1 span {
+  color: #d4af37;
+}
+
+.register-brand-luxury p {
+  color: #888;
+  font-size: 0.95rem;
+}
+
+.form-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.5rem;
+  margin-bottom: 2rem;
+}
+
+@media (max-width: 600px) {
+  .form-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.form-group-premium label {
+  display: block;
+  font-size: 0.75rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: #aaa;
+  margin-bottom: 8px;
+}
+
+.input-wrapper-premium {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.input-wrapper-premium input {
+  width: 100%;
+  padding: 14px 20px 14px 45px;
+  background: white;
+  border: 1.5px solid #eee;
+  border-radius: 15px;
+  font-size: 0.95rem;
+  font-weight: 600;
+  transition: all 0.3s ease;
+}
+
+.input-wrapper-premium input:focus {
+  border-color: #d4af37;
+  outline: none;
+  box-shadow: 0 0 0 4px rgba(212, 175, 55, 0.1);
+}
+
+.input-icon {
+  position: absolute;
+  left: 15px;
+  color: #bbb;
+}
+
+.btn-submit-premium {
+  width: 100%;
+  background: #120907;
+  color: white;
+  border: none;
+  padding: 16px;
+  border-radius: 15px;
+  font-size: 1rem;
+  font-weight: 800;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  transition: all 0.3s ease;
+}
+
+.btn-submit-premium:hover {
+  background: #8b0000;
+  transform: translateY(-2px);
+}
+
+.error-message {
+  background: #fff0f0;
+  color: #ff4d4d;
+  padding: 12px;
+  border-radius: 12px;
+  font-size: 0.85rem;
+  font-weight: 700;
+  margin-bottom: 1.5rem;
+  text-align: center;
+}
+
+.success-message {
+  background: #f0fff4;
+  color: #2f855a;
+  padding: 12px;
+  border-radius: 12px;
+  font-size: 0.85rem;
+  font-weight: 700;
+  margin-bottom: 1.5rem;
+  text-align: center;
+}
+
+.register-footer-premium {
+  text-align: center;
+  margin-top: 2rem;
+}
+
+.register-footer-premium p {
+  color: #777;
+  font-weight: 600;
+}
+
+.toggle-mode-btn {
+  color: #d4af37;
+  text-decoration: none;
+  font-weight: 800;
+  margin-left: 8px;
+}

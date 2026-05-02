@@ -1,12 +1,24 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { ShoppingBag, Star, Heart, Flame } from 'lucide-react';
 import { useShop } from '../../context/ShopContext';
+import { useAuth } from '../../context/AuthContext';
 import './ProductCard.css';
 
 const ProductCard = ({ product }) => {
   const { addToCart, toggleWishlist, wishlist } = useShop();
+  const { user } = useAuth();
+  const navigate = useNavigate();
   const isWishlisted = wishlist.find(item => item.id === product.id);
+
+  const handleAction = (action, e) => {
+    e.preventDefault();
+    if (!user) {
+      navigate('/login');
+      return;
+    }
+    action(product);
+  };
 
   const renderSpiceLevel = (level) => {
     if (!level || level === 0) return null;
@@ -32,14 +44,14 @@ const ProductCard = ({ product }) => {
         <div className="product-actions">
           <button 
             className={`action-icon ${isWishlisted ? 'active' : ''}`} 
-            onClick={() => toggleWishlist(product)}
+            onClick={(e) => handleAction(toggleWishlist, e)}
             aria-label="Add to Wishlist"
           >
             <Heart size={18} fill={isWishlisted ? 'var(--color-primary)' : 'none'} />
           </button>
           <button 
             className="action-icon" 
-            onClick={() => addToCart(product)}
+            onClick={(e) => handleAction(addToCart, e)}
             aria-label="Add to Cart"
           >
             <ShoppingBag size={18} />
