@@ -1,5 +1,6 @@
 import React from 'react';
 import { Briefcase, Truck, FileText, Headphones } from 'lucide-react';
+import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import './Business.css';
 
@@ -12,6 +13,10 @@ const Business = () => {
           <div className="discovery-badge fade-in-up">B2B Partnerships</div>
           <h1 className="fade-in-up" style={{ animationDelay: '0.2s' }}>Empowering <span>Culinary Excellence</span></h1>
           <p className="fade-in-up" style={{ animationDelay: '0.4s' }}>Global wholesale solutions for Michelin-starred kitchens, luxury hotels, and boutique retailers. Authentic spices, sourced directly, delivered worldwide.</p>
+          <div className="hero-btns fade-in-up" style={{ animationDelay: '0.6s' }}>
+            <a href="#inquiry" className="btn-premium">Talk to Us</a>
+            <Link to="/about" className="btn-outline" style={{ borderColor: 'white', color: 'white' }}>Our Story</Link>
+          </div>
           <div className="hero-stats fade-in-up" style={{ animationDelay: '0.6s' }}>
             <div className="stat-item">
               <strong>500+</strong>
@@ -60,7 +65,7 @@ const Business = () => {
         </section>
 
         {/* Custom Request Form */}
-        <section className="custom-request">
+        <section className="custom-request" id="inquiry">
           <div className="request-container">
             <div className="request-info">
               <h2>Custom Sourcing <span>Requests</span></h2>
