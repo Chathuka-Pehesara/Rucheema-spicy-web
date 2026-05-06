@@ -5,6 +5,7 @@ import { Globe, Send, MessageCircle, Mail, Phone, MapPin } from 'lucide-react';
 import './Footer.css';
 
 const Footer = () => {
+  const { t } = useTranslation();
   return (
     <footer className="footer">
       <div className="container footer-grid">
@@ -26,20 +27,20 @@ const Footer = () => {
         <div className="footer-links">
           <h3>Quick Links</h3>
           <ul>
-            <li><Link to="/collections">Our Collections</Link></li>
+            <li><Link to="/collections">{t('nav.collections')}</Link></li>
             <li><Link to="/recipes">Spice Recipes</Link></li>
             <li><Link to="/about">Our Story</Link></li>
-            <li><Link to="/business">Business/Wholesale</Link></li>
+            <li><Link to="/business">{t('nav.business')}</Link></li>
           </ul>
         </div>
 
         <div className="footer-links">
-          <h3>Customer Care</h3>
+          <h3>{t('footer.support')}</h3>
           <ul>
             <li><Link to="/shipping">Shipping Policy</Link></li>
             <li><Link to="/returns">Returns & Refunds</Link></li>
             <li><Link to="/faq">FAQs</Link></li>
-            <li><Link to="/contact">Contact Us</Link></li>
+            <li><Link to="/contact">{t('footer.contact_us')}</Link></li>
           </ul>
         </div>
 

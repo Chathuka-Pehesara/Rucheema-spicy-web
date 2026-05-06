@@ -51,9 +51,9 @@ const Header = () => {
   };
 
   const navLinks = [
-    { name: 'Home', path: '/' },
-    { name: 'Collections', path: '/collections' },
-    { name: 'Business', path: '/business' },
+    { name: t('nav.home'), path: '/' },
+    { name: t('nav.collections'), path: '/collections' },
+    { name: t('nav.business'), path: '/business' },
   ];
 
   return (
@@ -145,11 +145,11 @@ const Header = () => {
             </div>
           ) : (
             <div className="header-auth-links">
-              <Link to="/login" className="login-btn-header">
-                Login
+              <Link to="/login" className="login-link-header">
+                {t('nav.login')}
               </Link>
-              <Link to="/register" className="register-btn-header">
-                Register
+              <Link to="/register" className="btn-premium register-btn-header">
+                {t('nav.register')}
               </Link>
             </div>
           )}

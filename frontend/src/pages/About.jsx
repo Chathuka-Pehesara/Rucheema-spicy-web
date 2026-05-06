@@ -1,9 +1,11 @@
 import React, { useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import { Award, Leaf, Globe, Heart, CheckCircle, ShieldCheck, Microscope, Users } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 import './About.css';
 
 const About = () => {
+  const { t } = useTranslation();
   const observerRef = useRef(null);
 
   useEffect(() => {
@@ -192,8 +194,8 @@ const About = () => {
           <h2>Experience the <span>Gold Standard</span></h2>
           <p>Join thousands of gourmet chefs and home connoisseurs who refuse to settle for anything less than perfection.</p>
           <div className="cta-btns">
-            <Link to="/collections" className="btn-premium">View Premium Collection</Link>
-            <Link to="/business" className="btn-outline-dark">Wholesale Inquiries</Link>
+            <Link to="/collections" className="btn-premium">{t('hero.cta')}</Link>
+            <Link to="/business" className="btn-outline-dark">{t('nav.business')}</Link>
           </div>
         </div>
       </section>

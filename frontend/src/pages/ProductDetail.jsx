@@ -1,11 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { Star, Heart, ShoppingBag, MapPin, Flame, Leaf } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 import { useShop } from '../context/ShopContext';
 import { useAuth } from '../context/AuthContext';
 import './ProductDetail.css';
 
 const ProductDetail = () => {
+  const { t } = useTranslation();
   const { id } = useParams();
   const navigate = useNavigate();
   const [product, setProduct] = useState(null);
@@ -99,7 +101,7 @@ const ProductDetail = () => {
                 className="btn-premium add-to-cart" 
                 onClick={() => handleAction(addToCart, product, quantity)}
               >
-                <ShoppingBag size={20} /> Add to Cart
+                <ShoppingBag size={20} /> {t('product.cta')}
               </button>
               <button 
                 className={`wishlist-btn ${isWishlisted ? 'active' : ''}`}
@@ -126,14 +128,14 @@ const ProductDetail = () => {
               <img src="https://images.unsplash.com/photo-1588166524941-3bf61a9c41db?q=80&w=600" alt="Recipe" />
               <div className="recipe-info">
                 <h4>Signature {product.name} Roast</h4>
-                <button className="btn-link">View Recipe</button>
+                <button className="btn-link">{t('product.recipe_cta')}</button>
               </div>
             </div>
             <div className="recipe-card">
               <img src="https://images.unsplash.com/photo-1565557623262-b51c2513a641?q=80&w=600" alt="Recipe" />
               <div className="recipe-info">
                 <h4>Infused Herbal Tea</h4>
-                <button className="btn-link">View Recipe</button>
+                <button className="btn-link">{t('product.recipe_cta')}</button>
               </div>
             </div>
           </div>

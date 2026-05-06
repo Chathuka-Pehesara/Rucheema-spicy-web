@@ -1,8 +1,10 @@
 import React, { useState } from 'react';
 import { Search, Flame, Leaf, Wind } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 import './SpiceFinder.css';
 
 const SpiceFinder = () => {
+  const { t } = useTranslation();
   const [activeMood, setActiveMood] = useState('Spicy');
 
   const moods = [
@@ -37,7 +39,7 @@ const SpiceFinder = () => {
 
             <div className="finder-search">
               <input type="text" placeholder="What are you cooking today? (e.g. Chicken Curry, Lamb Stew)" />
-              <button className="btn-premium">Find Spices</button>
+              <button className="btn-premium">{t('spice_finder.cta')}</button>
             </div>
           </div>
           <div className="finder-image">

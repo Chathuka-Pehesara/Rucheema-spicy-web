@@ -5,6 +5,7 @@ import './Hero.css';
 import heroBg from '../../assets/hero-bg.png';
 
 const Hero = () => {
+  const { t } = useTranslation();
   return (
     <section className="hero">
       <div className="hero-bg">
@@ -18,8 +19,7 @@ const Hero = () => {
           Elevate your culinary journey with Richeema's premium collection.
         </p>
         <div className="hero-btns fade-in" style={{ animationDelay: '0.4s' }}>
-          <Link to="/collections" className="btn-premium">Shop Collection</Link>
-          <Link to="/about" className="btn-outline" style={{ borderColor: 'white', color: 'white', textDecoration: 'none' }}>Our Story</Link>
+          <Link to="/collections" className="btn-premium">{t('hero.cta')}</Link>
         </div>
       </div>
     </section>

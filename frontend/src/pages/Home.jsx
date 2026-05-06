@@ -6,10 +6,12 @@ import SpiceFinder from '../components/home/SpiceFinder';
 import { ShieldCheck, Truck, RotateCcw, Award, CheckCircle } from 'lucide-react';
 import { SPICES_DATA, CATEGORIES, SUBSCRIPTION_PLANS } from '../utils/mockData';
 import { useAuth } from '../context/AuthContext';
+import { useTranslation } from 'react-i18next';
 import './Home.css';
 
 const Home = () => {
   const { user } = useAuth();
+  const { t } = useTranslation();
   const navigate = useNavigate();
 
   const handleSubscribe = () => {
@@ -67,7 +69,7 @@ const Home = () => {
                 <div className="cat-content">
                   <h3>{cat.name}</h3>
                   <p>Hand-selected varieties for the discerning palate.</p>
-                  <Link to="/collections" className="btn-link">Explore Collection</Link>
+                  <Link to="/collections" className="btn-link">{t('nav.collections')}</Link>
                 </div>
               </div>
             ))}
@@ -109,7 +111,7 @@ const Home = () => {
                   className={plan.featured ? 'btn-premium' : 'btn-outline'}
                   onClick={handleSubscribe}
                 >
-                  Select Plan
+                  {t('subscription.cta')}
                 </button>
               </div>
             ))}

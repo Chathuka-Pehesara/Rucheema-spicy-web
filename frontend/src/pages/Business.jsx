@@ -1,8 +1,10 @@
 import React from 'react';
 import { Briefcase, Truck, FileText, Headphones } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 import './Business.css';
 
 const Business = () => {
+  const { t } = useTranslation();
   return (
     <div className="business-page">
       <div className="business-hero">
@@ -94,7 +96,7 @@ const Business = () => {
                   <label>Message / Requirements</label>
                   <textarea rows="4" placeholder="Tell us what you are looking for..."></textarea>
                 </div>
-                <button className="btn-premium" type="button">Submit Request</button>
+                <button className="btn-premium" type="button">{t('footer.contact_us')}</button>
               </form>
             </div>
           </div>

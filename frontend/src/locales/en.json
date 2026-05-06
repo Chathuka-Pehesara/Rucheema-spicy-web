@@ -1,29 +1,41 @@
 {
   "nav": {
     "home": "Home",
-    "collections": "Collections",
-    "about": "About",
+    "collections": "Explore Spices",
+    "about": "Our Story",
     "cart": "Cart",
-    "login": "Login",
-    "register": "Register",
+    "login": "Sign In",
+    "register": "Get Started",
     "dashboard": "Dashboard",
-    "admin": "Admin"
+    "admin": "Admin",
+    "business": "Partner with Us"
   },
   "hero": {
     "badge": "Artisanal Spice Masters",
     "title": "Experience the Essence of Pure Spices",
     "subtitle": "Directly sourced from the heart of Sri Lanka's organic gardens. Crafted for the global gourmet.",
-    "cta": "Explore Collections"
+    "cta": "Get Started"
   },
   "featured": {
     "title": "Premium Selection",
     "subtitle": "Hand-picked spices from around the globe, curated for the discerning palate.",
-    "view_all": "View All Products"
+    "view_all": "Shop All"
   },
   "footer": {
     "tagline": "Crafting the future of artisanal spices since 2024.",
     "links": "Quick Links",
-    "support": "Support",
-    "rights": "All rights reserved."
+    "support": "Talk to Us",
+    "rights": "All rights reserved.",
+    "contact_us": "Talk to Us"
+  },
+  "subscription": {
+    "cta": "Book Now"
+  },
+  "product": {
+    "cta": "Order Now",
+    "recipe_cta": "Start Cooking"
+  },
+  "spice_finder": {
+    "cta": "Find My Match"
   }
 }

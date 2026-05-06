@@ -255,22 +255,16 @@
   gap: 1rem;
 }
 
-.login-btn-header {
-  background: transparent;
-  color: var(--color-primary-dark);
-  padding: 0.6rem 1.2rem;
-  border-radius: 50px;
+.login-link-header {
+  color: var(--color-text);
   font-weight: 600;
   font-size: 0.9rem;
   transition: var(--transition-fast);
-  border: 1.5px solid var(--color-primary-dark);
+  padding: 0.5rem 0.5rem;
 }
 
-.login-btn-header:hover {
-  background: var(--color-primary-dark);
-  color: white;
-  transform: translateY(-2px);
-  box-shadow: var(--shadow-md);
+.login-link-header:hover {
+  color: var(--color-primary-dark);
 }
 
 .register-btn-header {
