@@ -290,3 +290,39 @@
   transform: translateY(-2px);
   box-shadow: var(--shadow-md);
 }
+
+/* Language Switcher Styles */
+.lang-switcher {
+  display: flex;
+  background: rgba(0, 0, 0, 0.03);
+  padding: 4px;
+  border-radius: 30px;
+  border: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+.lang-btn {
+  padding: 4px 10px;
+  border-radius: 20px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: #888;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  text-transform: uppercase;
+}
+
+.lang-btn:hover {
+  color: var(--color-primary-dark);
+}
+
+.lang-btn.active {
+  background: white;
+  color: var(--color-primary-dark);
+  box-shadow: 0 4px 10px rgba(0,0,0,0.08);
+}
+
+@media (max-width: 768px) {
+  .lang-switcher {
+    display: none; /* Hide on small mobile to save space, or move to menu */
+  }
+}

@@ -1,13 +1,15 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
-import { ShoppingCart, Search, User, Menu, X, Heart, LogOut, LayoutDashboard, Shield, Settings as SettingsIcon } from 'lucide-react';
+import { ShoppingCart, Search, User, Menu, X, Heart, LogOut, LayoutDashboard, Shield, Settings as SettingsIcon, Languages } from 'lucide-react';
 import { useShop } from '../../context/ShopContext';
 import { useAuth } from '../../context/AuthContext';
+import { useTranslation } from 'react-i18next';
 import './Header.css';
 
 const Header = () => {
-  const { cartCount, wishlist } = useShop();
+  const { cartCount } = useShop();
   const { user, logout } = useAuth();
+  const { t, i18n } = useTranslation();
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isProfileOpen, setIsProfileOpen] = useState(false);
@@ -21,6 +23,26 @@ const Header = () => {
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
+
+  const changeLanguage = (lng) => {
+    // 1. Update i18n for internal labels (optional, but keep for consistency)
+    i18n.changeLanguage(lng);
+    
+    // 2. Set Google Translate Cookie for total system conversion
+    // Format: /en/si or /en/ta
+    document.cookie = `googtrans=/en/${lng}; path=/; domain=${window.location.hostname}`;
+    document.cookie = `googtrans=/en/${lng}; path=/`; // Fallback for local
+    
+    // 3. Trigger Google Translate Widget
+    const select = document.querySelector('.goog-te-combo');
+    if (select) {
+      select.value = lng;
+      select.dispatchEvent(new Event('change'));
+    } else {
+      // If widget not ready, we reload to apply cookie-based translation
+      window.location.reload();
+    }
+  };
 
   const handleLogout = () => {
     logout();
@@ -41,14 +63,14 @@ const Header = () => {
           {isMobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
         </div>
 
-        <Link to="/" className="logo">
+        <Link to="/" className="logo notranslate">
           RICHEEMA<span>SPICY</span>
         </Link>
 
         <nav className={`nav-menu ${isMobileMenuOpen ? 'active' : ''}`}>
           <ul>
             {navLinks.map((link) => (
-              <li key={link.name}>
+              <li key={link.path}>
                 <Link 
                   to={link.path} 
                   className={location.pathname === link.path ? 'active' : ''}
@@ -62,6 +84,12 @@ const Header = () => {
         </nav>
 
         <div className="header-actions">
+          <div className="lang-switcher notranslate">
+            <button className={`lang-btn ${i18n.language === 'en' ? 'active' : ''}`} onClick={() => changeLanguage('en')}>EN</button>
+            <button className={`lang-btn ${i18n.language === 'si' ? 'active' : ''}`} onClick={() => changeLanguage('si')}>සිං</button>
+            <button className={`lang-btn ${i18n.language === 'ta' ? 'active' : ''}`} onClick={() => changeLanguage('ta')}>தம</button>
+          </div>
+
           <button className="action-btn" aria-label="Search">
             <Search size={20} />
           </button>

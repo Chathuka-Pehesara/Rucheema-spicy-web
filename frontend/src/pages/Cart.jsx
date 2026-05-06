@@ -16,7 +16,7 @@ const Cart = () => {
   useEffect(() => {
     const fetchSettings = async () => {
       try {
-        const response = await fetch('http://localhost:5000/api/settings');
+        const response = await fetch(`${import.meta.env.VITE_API_URL}/api/settings`);
         const data = await response.json();
         setSettings(data);
       } catch (err) {
@@ -78,7 +78,7 @@ const Cart = () => {
         totalPrice: total,
       };
 
-      const response = await fetch('http://localhost:5000/api/orders', {
+      const response = await fetch(`${import.meta.env.VITE_API_URL}/api/orders`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

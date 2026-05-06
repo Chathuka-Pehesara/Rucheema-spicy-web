@@ -219,7 +219,7 @@ const Dashboard = () => {
   // Fetch live user stats (owner/admin only)
   useEffect(() => {
     if (user?.token) {
-      fetch('http://localhost:5000/api/users/stats', {
+      fetch(`${import.meta.env.VITE_API_URL}/api/users/stats`, {
         headers: { Authorization: `Bearer ${user.token}` },
       })
         .then(r => r.json())
@@ -260,7 +260,7 @@ const Dashboard = () => {
   const fetchProducts = async () => {
     try {
       setLoading(true);
-      const res = await fetch('http://localhost:5000/api/products');
+      const res = await fetch(`${import.meta.env.VITE_API_URL}/api/products`);
       const data = await res.json();
       setProducts(data);
       setLoading(false);
@@ -341,8 +341,8 @@ const Dashboard = () => {
 
     try {
       const url = currentProduct 
-        ? `http://localhost:5000/api/products/${currentProduct._id}` 
-        : 'http://localhost:5000/api/products';
+        ? `${import.meta.env.VITE_API_URL}/api/products/${currentProduct._id}` 
+        : `${import.meta.env.VITE_API_URL}/api/products`;
       
       const method = currentProduct ? 'PUT' : 'POST';
 
@@ -375,7 +375,7 @@ const Dashboard = () => {
     if (!window.confirm('Are you sure you want to delete this artisanal masterpiece?')) return;
 
     try {
-      const res = await fetch(`http://localhost:5000/api/products/${id}`, {
+      const res = await fetch(`${import.meta.env.VITE_API_URL}/api/products/${id}`, {
         method: 'DELETE',
         headers: {
           Authorization: `Bearer ${user.token}`,

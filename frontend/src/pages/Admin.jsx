@@ -59,7 +59,7 @@ const Admin = () => {
   const fetchProducts = async () => {
     try {
       setLoading(true);
-      const res = await fetch('http://localhost:5000/api/products');
+      const res = await fetch(`${import.meta.env.VITE_API_URL}/api/products`);
       const data = await res.json();
       setProductList(data);
       setLoading(false);
@@ -112,8 +112,8 @@ const Admin = () => {
 
       try {
         const url = modalMode === 'edit' 
-          ? `http://localhost:5000/api/products/${formData._id}` 
-          : 'http://localhost:5000/api/products';
+          ? `${import.meta.env.VITE_API_URL}/api/products/${formData._id}` 
+          : `${import.meta.env.VITE_API_URL}/api/products`;
         
         const method = modalMode === 'edit' ? 'PUT' : 'POST';
 
@@ -147,7 +147,7 @@ const Admin = () => {
   const handleDeleteProductReal = async (id) => {
     if (!window.confirm('Delete this product permanently?')) return;
     try {
-      const res = await fetch(`http://localhost:5000/api/products/${id}`, {
+      const res = await fetch(`${import.meta.env.VITE_API_URL}/api/products/${id}`, {
         method: 'DELETE',
         headers: { Authorization: `Bearer ${user.token}` },
       });

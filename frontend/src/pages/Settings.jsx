@@ -12,7 +12,7 @@ const Settings = () => {
   useEffect(() => {
     const fetchSettings = async () => {
       try {
-        const response = await fetch('http://localhost:5000/api/settings');
+        const response = await fetch(`${import.meta.env.VITE_API_URL}/api/settings`);
         const data = await response.json();
         setSettings(data);
         setLoading(false);
@@ -26,7 +26,7 @@ const Settings = () => {
   const handleUpdate = async (e) => {
     e.preventDefault();
     try {
-      const response = await fetch('http://localhost:5000/api/settings', {
+      const response = await fetch(`${import.meta.env.VITE_API_URL}/api/settings`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',

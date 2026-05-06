@@ -1,5 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import { Globe, Send, MessageCircle, Mail, Phone, MapPin } from 'lucide-react';
 import './Footer.css';
 

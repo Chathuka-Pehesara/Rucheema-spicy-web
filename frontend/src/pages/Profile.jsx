@@ -85,7 +85,7 @@ const Profile = () => {
   const fetchOrders = async () => {
     setLoadingOrders(true);
     try {
-      const res  = await fetch('http://localhost:5000/api/orders/myorders', {
+      const res  = await fetch(`${import.meta.env.VITE_API_URL}/api/orders/myorders`, {
         headers: { Authorization: `Bearer ${user.token}` },
       });
       const data = await res.json();
@@ -100,11 +100,11 @@ const Profile = () => {
     formData.append('image', file);
     setUploading(true);
     try {
-      const res      = await fetch('http://localhost:5000/api/upload', { method: 'POST', body: formData });
+      const res      = await fetch(`${import.meta.env.VITE_API_URL}/api/upload`, { method: 'POST', body: formData });
       const data     = await res.text();
-      const fullPath = `http://localhost:5000${data}`;
-      setAvatar(fullPath);
-      const updateRes = await fetch('http://localhost:5000/api/users/profile', {
+      const fullPath = `${import.meta.env.VITE_API_URL}${data}`;
+      
+      const updateRes = await fetch(`${import.meta.env.VITE_API_URL}/api/users/profile`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${user.token}` },
         body: JSON.stringify({ avatar: fullPath }),
@@ -120,7 +120,7 @@ const Profile = () => {
     setMessage(null); setError(null);
     if (password && password !== confirmPassword) { setError('Passwords do not match'); return; }
     try {
-      const res  = await fetch('http://localhost:5000/api/users/profile', {
+      const res  = await fetch(`${import.meta.env.VITE_API_URL}/api/users/profile`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${user.token}` },
         body: JSON.stringify({ name, email, password: password || undefined, avatar, city, town, country }),
