@@ -1,4 +1,4 @@
-// Mock city distances from Colombo (Source)
+// Distances in km from Colombo (dispatch center)
 const SL_CITY_DISTANCES = {
   'Colombo': 0,
   'Dehiwala': 10,
@@ -10,32 +10,71 @@ const SL_CITY_DISTANCES = {
   'Anuradhapura': 200,
   'Ratnapura': 100,
   'Matara': 160,
+  'Trincomalee': 260,
+  'Batticaloa': 310,
+  'Kurunegala': 95,
+  'Matale': 145,
+  'Badulla': 220,
+  'Nuwara Eliya': 165,
 };
 
+/**
+ * Returns the km distance between two locations.
+ * For Sri Lanka, uses the lookup table (distances from Colombo).
+ * For international, returns a fixed large value.
+ */
 export const calculateDistance = (fromCity, fromCountry, toCity, toCountry) => {
-  if (fromCountry === toCountry && fromCity === toCity) return 0;
-  
-  if (fromCountry === 'Sri Lanka' && toCountry === 'Sri Lanka') {
-    // If it's SL, try to get distance from our table
-    const d1 = SL_CITY_DISTANCES[fromCity] || 0;
-    const d2 = SL_CITY_DISTANCES[toCity] || 50; // Default 50km if city not in table
-    return Math.abs(d1 - d2);
+  const fCountry = (fromCountry || '').trim().toLowerCase();
+  const tCountry = (toCountry || '').trim().toLowerCase();
+  const fCity    = (fromCity   || '').trim();
+  const tCity    = (toCity     || '').trim();
+
+  const isFromSL = fCountry === 'sri lanka';
+  const isToSL   = tCountry === 'sri lanka';
+
+  if (isFromSL && isToSL) {
+    const lookup = (city) => {
+      const key = Object.keys(SL_CITY_DISTANCES)
+        .find(k => k.toLowerCase() === city.toLowerCase());
+      return key !== undefined ? SL_CITY_DISTANCES[key] : null;
+    };
+
+    const fromDist = lookup(fCity) ?? 0;   // Distance of dispatch city from Colombo
+    const toDist   = lookup(tCity) ?? 30;  // Distance of user city from Colombo (30km fallback)
+
+    // If dispatch city IS Colombo (dist=0) → user's distance is the delivery distance
+    // Otherwise compute the difference between the two
+    const distance = Math.abs(fromDist - toDist);
+
+    // Minimum 2 km for same-area deliveries
+    return distance === 0 ? 2 : distance;
   }
-  
-  // Basic mock distances for international
-  if (fromCountry !== toCountry) {
-    return 5000; // Flat 5000km for international mock
-  }
-  
-  return 50; 
+
+  // International: fixed mock (real apps would use a geo API)
+  if (!isToSL) return 5000;
+
+  return 50;
 };
 
-export const calculateShippingFee = (distance, rates, isLocal) => {
-  if (isLocal) {
-    const { localBase, localPerKm } = rates;
-    return localBase + (distance * localPerKm);
-  }
-  
-  const { internationalBase, internationalPerKm } = rates;
+/**
+ * Calculates delivery fee for Sri Lanka (local) OR shipment fee for international.
+ * - Sri Lanka: localBase + (distance * localPerKm)
+ * - International: internationalBase + (distance * internationalPerKm)
+ */
+export const calculateDeliveryFee = (distance, rates) => {
+  const { localBase = 0, localPerKm = 2 } = rates;
+  return localBase + (distance * localPerKm);
+};
+
+export const calculateShipmentFee = (distance, rates) => {
+  const { internationalBase = 50, internationalPerKm = 0.5 } = rates;
   return internationalBase + (distance * internationalPerKm);
 };
+
+// Keep legacy export for backward compat
+export const calculateShippingFee = (distance, rates, isLocal) => {
+  return isLocal
+    ? calculateDeliveryFee(distance, rates)
+    : calculateShipmentFee(distance, rates);
+};
+

@@ -17,6 +17,9 @@ const authUser = asyncHandler(async (req, res) => {
       email: user.email,
       role: user.role,
       avatar: user.avatar,
+      city: user.city,
+      town: user.town,
+      country: user.country,
       token: generateToken(user._id),
     });
   } else {
@@ -54,10 +57,6 @@ const registerUser = asyncHandler(async (req, res) => {
       name: user.name,
       email: user.email,
       role: user.role,
-      avatar: user.avatar,
-      city: user.city,
-      town: user.town,
-      country: user.country,
       token: generateToken(user._id),
     });
   } else {
@@ -79,6 +78,9 @@ const getUserProfile = asyncHandler(async (req, res) => {
       email: user.email,
       role: user.role,
       avatar: user.avatar,
+      city: user.city,
+      town: user.town,
+      country: user.country,
     });
   } else {
     res.status(404);
@@ -99,7 +101,7 @@ const updateUserProfile = asyncHandler(async (req, res) => {
     user.city = req.body.city || user.city;
     user.town = req.body.town || user.town;
     user.country = req.body.country || user.country;
-    
+
     if (req.body.password) {
       user.password = req.body.password;
     }
@@ -138,7 +140,7 @@ const deleteUser = asyncHandler(async (req, res) => {
   const user = await User.findById(req.params.id);
 
   if (user) {
-    await user.deleteOne();
+    await User.deleteOne({ _id: req.params.id });
     res.json({ message: 'User removed' });
   } else {
     res.status(404);
@@ -170,7 +172,6 @@ const updateUser = asyncHandler(async (req, res) => {
     user.name = req.body.name || user.name;
     user.email = req.body.email || user.email;
     user.role = req.body.role || user.role;
-    user.avatar = req.body.avatar || user.avatar;
 
     const updatedUser = await user.save();
 
@@ -179,11 +180,50 @@ const updateUser = asyncHandler(async (req, res) => {
       name: updatedUser.name,
       email: updatedUser.email,
       role: updatedUser.role,
-      avatar: updatedUser.avatar,
     });
   } else {
     res.status(404);
     throw new Error('User not found');
+  }
+});
+
+// @desc    Get user statistics for owner dashboard
+// @route   GET /api/users/stats
+// @access  Private/Owner
+const getUserStats = asyncHandler(async (req, res) => {
+  try {
+    const totalUsers = await User.countDocuments({});
+    
+    // Simple query with robust regex
+    const slUsers = await User.find({
+      country: { $regex: 'sri lanka', $options: 'i' }
+    }).select({ city: 1, town: 1, country: 1 });
+    
+    const cityMap = {};
+    slUsers.forEach(u => {
+      const c = (u.city || '').trim();
+      if (c) cityMap[c] = (cityMap[c] || 0) + 1;
+    });
+
+    let liveUsers = 0;
+    try {
+      const fifteenMinsAgo = new Date(Date.now() - 15 * 60 * 1000);
+      liveUsers = await User.countDocuments({
+        lastActive: { $gte: fifteenMinsAgo }
+      });
+    } catch (e) {
+      liveUsers = 0;
+    }
+
+    res.json({
+      totalUsers,
+      slUsers: slUsers.length,
+      liveUsers,
+      cityBreakdown: cityMap,
+    });
+  } catch (err) {
+    console.error('getUserStats error:', err);
+    res.status(500).json({ message: 'Server Error' });
   }
 });
 
@@ -196,4 +236,5 @@ module.exports = {
   deleteUser,
   getUserById,
   updateUser,
+  getUserStats,
 };

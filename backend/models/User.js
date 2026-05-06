@@ -38,6 +38,10 @@ const userSchema = mongoose.Schema(
       type: String,
       default: 'Sri Lanka',
     },
+    lastActive: {
+      type: Date,
+      default: Date.now,
+    },
   },
   {
     timestamps: true,

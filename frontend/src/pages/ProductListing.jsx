@@ -1,16 +1,32 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import ProductCard from '../components/product/ProductCard';
-import { SPICES_DATA } from '../utils/mockData';
 import { Search, ChevronDown, Flame, RotateCcw } from 'lucide-react';
 import './ProductListing.css';
 
 const ProductListing = () => {
+  const [products, setProducts] = useState([]);
+  const [loading, setLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('All');
   const [maxPrice, setMaxPrice] = useState(100);
   const [selectedSpices, setSelectedSpices] = useState([]);
 
-  const categories = ['All', 'Whole Spices', 'Artisanal Powders', 'Rare Exotics'];
+  useEffect(() => {
+    const fetchAllProducts = async () => {
+      try {
+        const res = await fetch('http://localhost:5000/api/products');
+        const data = await res.json();
+        setProducts(data);
+        setLoading(false);
+      } catch (err) {
+        console.error('Fetch products error:', err);
+        setLoading(false);
+      }
+    };
+    fetchAllProducts();
+  }, []);
+
+  const categories = ['All', 'Whole Spices', 'Powders', 'Rare Blends', 'Gift Sets'];
 
   const toggleSpiceLevel = (level) => {
     setSelectedSpices(prev => 
@@ -19,17 +35,17 @@ const ProductListing = () => {
   };
 
   const filteredProducts = useMemo(() => {
-    return SPICES_DATA.filter(product => {
+    return products.filter(product => {
       const matchesSearch = product.name.toLowerCase().includes(searchQuery.toLowerCase()) || 
                            product.description.toLowerCase().includes(searchQuery.toLowerCase()) ||
-                           product.origin.toLowerCase().includes(searchQuery.toLowerCase());
+                           (product.origin || '').toLowerCase().includes(searchQuery.toLowerCase());
       const matchesCategory = selectedCategory === 'All' || product.category === selectedCategory;
       const matchesPrice = product.price <= maxPrice;
       const matchesSpice = selectedSpices.length === 0 || selectedSpices.includes(product.spiceLevel);
       
       return matchesSearch && matchesCategory && matchesPrice && matchesSpice;
     });
-  }, [searchQuery, selectedCategory, maxPrice, selectedSpices]);
+  }, [products, searchQuery, selectedCategory, maxPrice, selectedSpices]);
 
   const clearFilters = () => {
     setSearchQuery('');
@@ -84,7 +100,7 @@ const ProductListing = () => {
                 >
                   {cat}
                   <span className="count">
-                    {SPICES_DATA.filter(p => cat === 'All' || p.category === cat).length}
+                    {products.filter(p => cat === 'All' || p.category === cat).length}
                   </span>
                 </li>
               ))}
@@ -154,15 +170,23 @@ const ProductListing = () => {
             </div>
           </div>
 
-          <div className="products-grid">
-            {filteredProducts.map((product, index) => (
-              <div key={product.id} className="grid-item-reveal" style={{ animationDelay: `${index * 0.05}s` }}>
-                <ProductCard product={product} />
-              </div>
-            ))}
-          </div>
+          {loading ? (
+            <div className="products-grid">
+              {[...Array(6)].map((_, i) => (
+                <div key={i} className="product-card-skeleton" style={{ height: '380px', background: '#f9f9f9', borderRadius: '24px' }}></div>
+              ))}
+            </div>
+          ) : (
+            <div className="products-grid">
+              {filteredProducts.map((product, index) => (
+                <div key={product._id} className="grid-item-reveal" style={{ animationDelay: `${index * 0.05}s` }}>
+                  <ProductCard product={product} />
+                </div>
+              ))}
+            </div>
+          )}
 
-          {filteredProducts.length === 0 && (
+          {!loading && filteredProducts.length === 0 && (
             <div className="no-results-premium">
               <div className="no-results-icon">🌶️</div>
               <h3>No Matches Found</h3>

@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import { Trash2, Plus, Minus, ArrowLeft, ShoppingBag, CreditCard, ShieldCheck, CheckCircle, Package } from 'lucide-react';
 import { useShop } from '../context/ShopContext';
 import { useAuth } from '../context/AuthContext';
-import { calculateDistance, calculateShippingFee } from '../utils/shippingUtils';
+import { calculateDistance, calculateDeliveryFee, calculateShipmentFee } from '../utils/shippingUtils';
 import './Cart.css';
 
 const Cart = () => {
@@ -28,18 +28,23 @@ const Cart = () => {
 
   useEffect(() => {
     if (settings && user) {
-      const isLocal = user.country === 'Sri Lanka';
+      // Fallback: if country missing from old session token, default to Sri Lanka
+      const userCountry = (user.country || 'Sri Lanka').trim();
+      const userCity    = (user.city    || 'Colombo').trim();
+      const isLocal = userCountry.toLowerCase() === 'sri lanka';
+
       const distance = calculateDistance(
-        settings.baseLocation.city, 
+        settings.baseLocation.city,
         settings.baseLocation.country,
-        user.city,
-        user.country
+        userCity,
+        userCountry
       );
-      const fee = calculateShippingFee(distance, settings.shippingRates, isLocal);
+      const fee = isLocal
+        ? calculateDeliveryFee(distance, settings.shippingRates)
+        : calculateShipmentFee(distance, settings.shippingRates);
       setShippingFee(fee);
     } else if (settings && !user) {
-      // Default for guests or if user location not set
-      setShippingFee(10); 
+      setShippingFee(0);
     }
   }, [settings, user]);
 
@@ -161,29 +166,55 @@ const Cart = () => {
                     <span>${subtotal.toFixed(2)}</span>
                   </div>
                   
-                  <div className="summary-line">
-                    <span>{user?.country === 'Sri Lanka' ? 'Delivery Fee' : 'Shipment Fee'}</span>
-                    <span>${shipping.toFixed(2)}</span>
-                  </div>
-
-                  {settings && user && (
-                    <div className="shipping-detail-box">
-                      <div className="detail-label">
-                        <Package size={12} /> Logistics Breakdown
-                      </div>
-                      <span className="detail-calc">
-                        {calculateDistance(
+                  {(() => {
+                    const userCountry = (user?.country || 'Sri Lanka').trim();
+                    const userCity    = (user?.city    || 'Colombo').trim();
+                    const isLocal = userCountry.toLowerCase() === 'sri lanka';
+                    const distance = settings && user
+                      ? calculateDistance(
                           settings.baseLocation.city,
                           settings.baseLocation.country,
-                          user.city,
-                          user.country
-                        )} km distance from dispatch center
-                      </span>
-                      <span className="detail-calc">
-                        Rate: ${user.country === 'Sri Lanka' ? settings.shippingRates.localPerKm : settings.shippingRates.internationalPerKm} per km
-                      </span>
-                    </div>
-                  )}
+                          userCity,
+                          userCountry
+                        )
+                      : null;
+                    const rate = settings
+                      ? (isLocal ? settings.shippingRates.localPerKm : settings.shippingRates.internationalPerKm)
+                      : null;
+
+                    return (
+                      <>
+                        {/* Sri Lanka: show Delivery Fee only */}
+                        {isLocal && (
+                          <div className="summary-line">
+                            <span>Delivery Fee</span>
+                            <span>${shipping.toFixed(2)}</span>
+                          </div>
+                        )}
+                        {/* International: show Shipment Fee only */}
+                        {!isLocal && (
+                          <div className="summary-line">
+                            <span>Shipment Fee</span>
+                            <span>${shipping.toFixed(2)}</span>
+                          </div>
+                        )}
+                        {/* Breakdown detail box */}
+                        {settings && user && distance !== null && (
+                          <div className="shipping-detail-box">
+                            <div className="detail-label">
+                              <Package size={12} /> Logistics Breakdown
+                            </div>
+                            <span className="detail-calc">
+                              {userCity} → {settings.baseLocation.city} &nbsp;|&nbsp; {distance} km
+                            </span>
+                            <span className="detail-calc">
+                              Rate: ${rate}/km{isLocal ? ' (Local)' : ' (International)'}
+                            </span>
+                          </div>
+                        )}
+                      </>
+                    );
+                  })()}
 
                   <div className="summary-line">
                     <span>Luxury Tax (8%)</span>

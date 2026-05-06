@@ -92,7 +92,7 @@ const Header = () => {
                     <User size={18} /> My Profile
                   </Link>
                   
-                  {(user.role === 'admin' || user.role === 'owner') && (
+                  {user.role === 'admin' && (
                     <>
                       <Link to="/admin" className="dropdown-item" onClick={() => setIsProfileOpen(false)}>
                         <Shield size={18} /> Admin Panel

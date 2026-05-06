@@ -9,7 +9,7 @@ const ProductCard = ({ product }) => {
   const { addToCart, toggleWishlist, wishlist } = useShop();
   const { user } = useAuth();
   const navigate = useNavigate();
-  const isWishlisted = wishlist.find(item => item.id === product.id);
+  const isWishlisted = wishlist.find(item => item._id === product._id);
 
   const handleAction = (action, e) => {
     e.preventDefault();
@@ -62,14 +62,14 @@ const ProductCard = ({ product }) => {
       <div className="product-info">
         <span className="product-cat">{product.category}</span>
         <h3 className="product-name" title={product.name}>
-          <Link to={`/product/${product.id}`}>{product.name}</Link>
+          <Link to={`/product/${product._id}`}>{product.name}</Link>
         </h3>
         <div className="product-meta">
           <div className="product-rating">
             <Star size={14} fill="var(--color-secondary)" color="var(--color-secondary)" />
-            <span>{product.rating}</span>
+            <span>{product.rating || 0}</span>
           </div>
-          <div className="product-price">${product.price.toFixed(2)}</div>
+          <div className="product-price">${Number(product.price).toFixed(2)}</div>
         </div>
       </div>
     </div>

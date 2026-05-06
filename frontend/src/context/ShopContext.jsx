@@ -43,10 +43,10 @@ export const ShopProvider = ({ children }) => {
       return;
     }
     setCart(prev => {
-      const existing = prev.find(item => item.id === product.id);
+      const existing = prev.find(item => item._id === product._id);
       if (existing) {
         return prev.map(item => 
-          item.id === product.id ? { ...item, quantity: item.quantity + quantity } : item
+          item._id === product._id ? { ...item, quantity: item.quantity + quantity } : item
         );
       }
       return [...prev, { ...product, quantity }];
@@ -55,12 +55,12 @@ export const ShopProvider = ({ children }) => {
   };
 
   const removeFromCart = (productId) => {
-    setCart(prev => prev.filter(item => item.id !== productId));
+    setCart(prev => prev.filter(item => item._id !== productId));
   };
 
   const updateQuantity = (productId, amount) => {
     setCart(prev => prev.map(item => {
-      if (item.id === productId) {
+      if (item._id === productId) {
         const newQty = Math.max(1, item.quantity + amount);
         return { ...item, quantity: newQty };
       }
@@ -77,10 +77,10 @@ export const ShopProvider = ({ children }) => {
 
   const toggleWishlist = (product) => {
     setWishlist(prev => {
-      const exists = prev.find(item => item.id === product.id);
+      const exists = prev.find(item => item._id === product._id);
       if (exists) {
         showNotification(`${product.name} removed from wishlist.`);
-        return prev.filter(item => item.id !== product.id);
+        return prev.filter(item => item._id !== product._id);
       }
       showNotification(`${product.name} added to wishlist!`);
       return [...prev, product];

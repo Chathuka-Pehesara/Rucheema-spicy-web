@@ -1,6 +1,5 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { SPICES_DATA } from '../utils/mockData';
 import { Star, Heart, ShoppingBag, MapPin, Flame, Leaf } from 'lucide-react';
 import { useShop } from '../context/ShopContext';
 import { useAuth } from '../context/AuthContext';
@@ -9,11 +8,28 @@ import './ProductDetail.css';
 const ProductDetail = () => {
   const { id } = useParams();
   const navigate = useNavigate();
-  const product = SPICES_DATA.find(p => p.id === parseInt(id)) || SPICES_DATA[0];
+  const [product, setProduct] = useState(null);
+  const [loading, setLoading] = useState(true);
   const [quantity, setQuantity] = useState(1);
   const { addToCart, toggleWishlist, wishlist } = useShop();
   const { user } = useAuth();
-  const isWishlisted = wishlist.find(item => item.id === product.id);
+
+  useEffect(() => {
+    const fetchProduct = async () => {
+      try {
+        const res = await fetch(`http://localhost:5000/api/products/${id}`);
+        const data = await res.json();
+        setProduct(data);
+        setLoading(false);
+      } catch (err) {
+        console.error('Fetch product detail error:', err);
+        setLoading(false);
+      }
+    };
+    fetchProduct();
+  }, [id]);
+
+  const isWishlisted = product && wishlist.find(item => item._id === product._id);
 
   const handleAction = (action, ...args) => {
     if (!user) {
@@ -22,6 +38,9 @@ const ProductDetail = () => {
     }
     action(...args);
   };
+
+  if (loading) return <div className="container" style={{padding: '10rem 0', textAlign: 'center'}}><h2>Consulting the spice masters...</h2></div>;
+  if (!product) return <div className="container" style={{padding: '10rem 0', textAlign: 'center'}}><h2>This spice has vanished from our archives.</h2></div>;
 
   return (
     <div className="product-detail-page">

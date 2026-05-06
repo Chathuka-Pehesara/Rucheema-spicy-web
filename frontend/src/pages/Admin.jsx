@@ -53,12 +53,25 @@ const Admin = () => {
 
   const COLORS = ['#8b0000', '#d4af37', '#1a0f0a', '#606060'];
 
-  const [productList, setProductList] = useState([
-    { id: 1, name: 'Ceylon Cinnamon Sticks', category: 'Whole Spices', price: 24.90, stock: 45, status: 'active' },
-    { id: 2, name: 'Premium Kashmiri Saffron', category: 'Rare Blends', price: 89.50, stock: 12, status: 'stock-low' },
-    { id: 3, name: 'Smoked Paprika Powder', category: 'Powders', price: 15.20, stock: 88, status: 'active' },
-    { id: 4, name: 'Artisanal Curry Blend', category: 'Rare Blends', price: 22.00, stock: 0, status: 'pending' },
-  ]);
+  const [productList, setProductList] = useState([]);
+  const [loading, setLoading] = useState(false);
+
+  const fetchProducts = async () => {
+    try {
+      setLoading(true);
+      const res = await fetch('http://localhost:5000/api/products');
+      const data = await res.json();
+      setProductList(data);
+      setLoading(false);
+    } catch (err) {
+      console.error('Admin fetch products error:', err);
+      setLoading(false);
+    }
+  };
+
+  React.useEffect(() => {
+    fetchProducts();
+  }, []);
 
   const [orderList, setOrderList] = useState([
     { id: 'RS-1024', customer: 'Johnatan Doe', email: 'j.doe@premium.com', date: 'Oct 28, 2023', total: 124.50, status: 'active' },
@@ -84,23 +97,64 @@ const Admin = () => {
     setShowModal(true);
   };
 
-  const handleSave = () => {
+  const handleSave = async () => {
     if (modalTarget === 'product') {
-      if (modalMode === 'add') {
-        setProductList([...productList, { ...formData, id: Date.now(), status: 'active' }]);
-      } else {
-        setProductList(productList.map(p => p.id === formData.id ? formData : p));
+      const productData = {
+        name: formData.name,
+        price: Number(formData.price),
+        category: formData.category,
+        countInStock: Number(formData.stock),
+        image: formData.image || 'https://images.unsplash.com/photo-1596040033229-a9821ebd058d?q=80&w=800',
+        description: formData.description,
+        origin: formData.origin,
+        spiceLevel: Number(formData.spiceLevel)
+      };
+
+      try {
+        const url = modalMode === 'edit' 
+          ? `http://localhost:5000/api/products/${formData._id}` 
+          : 'http://localhost:5000/api/products';
+        
+        const method = modalMode === 'edit' ? 'PUT' : 'POST';
+
+        const res = await fetch(url, {
+          method,
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${user.token}`,
+          },
+          body: JSON.stringify(productData),
+        });
+
+        if (res.ok) {
+          alert('Collection updated successfully!');
+          fetchProducts();
+          setShowModal(false);
+          setFormData({});
+        } else {
+          const errData = await res.json();
+          alert(errData.message || 'Failed to save product');
+        }
+      } catch (err) {
+        console.error('Admin save error:', err);
       }
-    } else if (modalTarget === 'user') {
-      if (modalMode === 'add') {
-        setUserList([...userList, { ...formData, id: Date.now(), status: 'active', joinDate: new Date().toLocaleDateString() }]);
-      } else {
-        setUserList(userList.map(u => u.id === formData.id ? formData : u));
-      }
-    } else if (modalTarget === 'order') {
-      setOrderList(orderList.map(o => o.id === formData.id ? formData : o));
+    } else {
+      // Handle other targets locally for now
+      setShowModal(false);
     }
-    setShowModal(false);
+  };
+
+  const handleDeleteProductReal = async (id) => {
+    if (!window.confirm('Delete this product permanently?')) return;
+    try {
+      const res = await fetch(`http://localhost:5000/api/products/${id}`, {
+        method: 'DELETE',
+        headers: { Authorization: `Bearer ${user.token}` },
+      });
+      if (res.ok) fetchProducts();
+    } catch (err) {
+      console.error('Delete error:', err);
+    }
   };
 
   const handleDeleteProduct = (id) => {
@@ -459,26 +513,44 @@ const Admin = () => {
                     </tr>
                   </thead>
                   <tbody>
-                    {productList.map(p => (
-                      <tr key={p.id}>
-                        <td>
-                          <div className="product-cell">
-                            <img src={`https://images.unsplash.com/photo-1596040033229-a9821ebd058d?q=80&w=100&u=${p.id}`} alt={p.name} />
-                            <span>{p.name}</span>
-                          </div>
-                        </td>
-                        <td>{p.category}</td>
-                        <td>${p.price.toFixed(2)}</td>
-                        <td>{p.stock} Units</td>
-                        <td><span className={`status-tag ${p.status}`}>{p.status.replace('-', ' ')}</span></td>
-                        <td>
-                          <div style={{display: 'flex', gap: '10px'}}>
-                            <button className="btn-details-link" onClick={() => handleOpenModal('product', 'edit', p)}>Edit</button>
-                            <button className="btn-details-link delete" onClick={() => handleDeleteProduct(p.id)}><Trash size={14} /></button>
-                          </div>
+                    {loading ? (
+                      <tr>
+                        <td colSpan="6" style={{ textAlign: 'center', padding: '3rem' }}>
+                          <p>Synchronizing with vault...</p>
                         </td>
                       </tr>
-                    ))}
+                    ) : productList.length === 0 ? (
+                      <tr>
+                        <td colSpan="6" style={{ textAlign: 'center', padding: '3rem' }}>
+                          <p>Your luxury collection is currently empty.</p>
+                        </td>
+                      </tr>
+                    ) : (
+                      productList.map(p => (
+                        <tr key={p._id}>
+                          <td>
+                            <div className="product-cell">
+                              <img src={p.image || 'https://images.unsplash.com/photo-1596040033229-a9821ebd058d?q=80&w=100'} alt={p.name} />
+                              <span>{p.name}</span>
+                            </div>
+                          </td>
+                          <td>{p.category}</td>
+                          <td>${Number(p.price).toFixed(2)}</td>
+                          <td>{p.countInStock} Units</td>
+                          <td>
+                            <span className={`status-tag ${p.countInStock > 10 ? 'active' : (p.countInStock > 0 ? 'stock-low' : 'out-of-stock')}`}>
+                              {p.countInStock > 10 ? 'Active' : (p.countInStock > 0 ? 'Stock Low' : 'Out of Stock')}
+                            </span>
+                          </td>
+                          <td>
+                            <div style={{display: 'flex', gap: '10px'}}>
+                              <button className="btn-details-link" onClick={() => handleOpenModal('product', 'edit', p)}>Edit</button>
+                              <button className="btn-details-link delete" onClick={() => handleDeleteProductReal(p._id)}><Trash size={14} /></button>
+                            </div>
+                          </td>
+                        </tr>
+                      ))
+                    )}
                   </tbody>
                 </table>
               </div>
@@ -769,75 +841,75 @@ const Admin = () => {
               <button className="btn-close-modal" onClick={() => setShowModal(false)}><Plus size={24} style={{ transform: 'rotate(45deg)' }} /></button>
             </div>
             
-            <div className="form-grid-dash">
+            <div className="modal-body-dash">
                {modalTarget === 'product' && (
-                 <>
-                   <div className="form-group-dash">
-                     <label>Spice Name</label>
-                     <input type="text" value={formData.name || ''} onChange={(e) => setFormData({...formData, name: e.target.value})} placeholder="e.g. Ceylon Cinnamon" />
-                   </div>
-                   <div className="form-group-dash">
-                     <label>Category</label>
-                     <select value={formData.category || ''} onChange={(e) => setFormData({...formData, category: e.target.value})}>
-                       <option value="Whole Spices">Whole Spices</option>
-                       <option value="Powders">Powders</option>
-                       <option value="Rare Blends">Rare Blends</option>
-                     </select>
-                   </div>
-                   <div className="form-group-dash">
-                     <label>Price ($)</label>
-                     <input type="number" value={formData.price || ''} onChange={(e) => setFormData({...formData, price: parseFloat(e.target.value)})} placeholder="29.99" />
-                   </div>
-                   <div className="form-group-dash">
-                     <label>Stock Units</label>
-                     <input type="number" value={formData.stock || ''} onChange={(e) => setFormData({...formData, stock: parseInt(e.target.value)})} placeholder="100" />
-                   </div>
-                 </>
+                 <div className="form-grid-dash">
+                    <div className="form-group-dash">
+                      <label>Spice Name</label>
+                      <input type="text" value={formData.name || ''} onChange={(e) => setFormData({...formData, name: e.target.value})} placeholder="e.g. Ceylon Cinnamon" />
+                    </div>
+                    <div className="form-group-dash">
+                      <label>Category</label>
+                      <select value={formData.category || 'Whole Spices'} onChange={(e) => setFormData({...formData, category: e.target.value})}>
+                        <option value="Whole Spices">Whole Spices</option>
+                        <option value="Powders">Powders</option>
+                        <option value="Rare Blends">Rare Blends</option>
+                        <option value="Gift Sets">Gift Sets</option>
+                      </select>
+                    </div>
+                    <div className="form-group-dash">
+                      <label>Price ($)</label>
+                      <input type="number" value={formData.price || ''} onChange={(e) => setFormData({...formData, price: e.target.value})} placeholder="29.99" />
+                    </div>
+                    <div className="form-group-dash">
+                      <label>Stock Units</label>
+                      <input type="number" value={formData.stock || ''} onChange={(e) => setFormData({...formData, stock: e.target.value})} placeholder="100" />
+                    </div>
+                    <div className="form-group-dash full-width">
+                      <label>Description</label>
+                      <textarea 
+                        value={formData.description || ''} 
+                        onChange={(e) => setFormData({ ...formData, description: e.target.value })} 
+                        placeholder="Describe the artisanal masterpiece..."
+                        style={{ 
+                          width: '100%', padding: '15px', borderRadius: '15px', 
+                          border: '1px solid #e0e0e0', minHeight: '100px', background: '#fafafa', fontFamily: 'inherit'
+                        }}
+                      />
+                    </div>
+                    <div className="form-group-dash">
+                      <label>Origin</label>
+                      <input type="text" value={formData.origin || ''} onChange={(e) => setFormData({ ...formData, origin: e.target.value })} placeholder="e.g. Sri Lanka" />
+                    </div>
+                    <div className="form-group-dash">
+                      <label>Spice Level</label>
+                      <input type="number" min="1" max="5" value={formData.spiceLevel || 1} onChange={(e) => setFormData({ ...formData, spiceLevel: e.target.value })} />
+                    </div>
+                    <div className="form-group-dash full-width">
+                      <label>Image URL</label>
+                      <input type="text" value={formData.image || ''} onChange={(e) => setFormData({ ...formData, image: e.target.value })} />
+                    </div>
+                 </div>
                )}
 
                {modalTarget === 'user' && (
-                 <>
-                   <div className="form-group-dash">
-                     <label>Full Name</label>
-                     <input type="text" value={formData.name || ''} onChange={(e) => setFormData({...formData, name: e.target.value})} placeholder="Alex Smith" />
-                   </div>
-                   <div className="form-group-dash">
-                     <label>Email Address</label>
-                     <input type="email" value={formData.email || ''} onChange={(e) => setFormData({...formData, email: e.target.value})} placeholder="alex@spice.com" />
-                   </div>
-                   <div className="form-group-dash">
-                     <label>Executive Role</label>
-                     <select value={formData.role || ''} onChange={(e) => setFormData({...formData, role: e.target.value})}>
-                       <option value="Standard Customer">Standard Customer</option>
-                       <option value="Premium Buyer">Premium Buyer</option>
-                       <option value="VIP Member">VIP Member</option>
-                     </select>
-                   </div>
-                 </>
-               )}
-
-               {modalTarget === 'order' && (
-                 <>
-                   <div className="form-group-dash">
-                     <label>Customer Name</label>
-                     <input type="text" value={formData.customer || ''} readOnly />
-                   </div>
-                   <div className="form-group-dash">
-                     <label>Current Status</label>
-                     <select value={formData.status || ''} onChange={(e) => setFormData({...formData, status: e.target.value})}>
-                       <option value="active">Delivered</option>
-                       <option value="pending">Pending</option>
-                       <option value="shipped">Shipped</option>
-                     </select>
-                   </div>
-                 </>
+                 <div className="form-grid-dash">
+                    <div className="form-group-dash">
+                      <label>Full Name</label>
+                      <input type="text" value={formData.name || ''} onChange={(e) => setFormData({...formData, name: e.target.value})} />
+                    </div>
+                    <div className="form-group-dash">
+                      <label>Email Address</label>
+                      <input type="email" value={formData.email || ''} onChange={(e) => setFormData({...formData, email: e.target.value})} />
+                    </div>
+                 </div>
                )}
             </div>
-
+            
             <div className="modal-footer-dash">
               <button className="btn-cancel-dash" onClick={() => setShowModal(false)}>Cancel</button>
               <button className="btn-save-dash" onClick={handleSave}>
-                {modalMode === 'add' ? 'Commit Entry' : 'Update Record'}
+                {modalMode === 'add' ? 'Confirm Action' : 'Save Changes'}
               </button>
             </div>
           </div>

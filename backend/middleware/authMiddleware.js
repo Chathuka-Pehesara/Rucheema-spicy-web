@@ -21,6 +21,9 @@ const protect = asyncHandler(async (req, res, next) => {
         throw new Error('Not authorized, user not found');
       }
 
+      // Update last active timestamp silently without triggering full validation
+      await User.findByIdAndUpdate(decoded.id, { lastActive: Date.now() });
+
       next();
     } catch (error) {
       console.error(error);

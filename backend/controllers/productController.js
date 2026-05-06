@@ -5,7 +5,7 @@ const Product = require('../models/Product');
 // @route   GET /api/products
 // @access  Public
 const getProducts = asyncHandler(async (req, res) => {
-  const products = await Product.find({});
+  const products = await Product.find({}).sort({ createdAt: -1 });
   res.json(products);
 });
 
@@ -30,7 +30,7 @@ const deleteProduct = asyncHandler(async (req, res) => {
   const product = await Product.findById(req.params.id);
 
   if (product) {
-    await product.remove();
+    await Product.deleteOne({ _id: req.params.id });
     res.json({ message: 'Product removed' });
   } else {
     res.status(404);
@@ -42,17 +42,19 @@ const deleteProduct = asyncHandler(async (req, res) => {
 // @route   POST /api/products
 // @access  Private/Admin
 const createProduct = asyncHandler(async (req, res) => {
+  const { name, price, image, category, countInStock, description, spiceLevel, origin } = req.body;
+
   const product = new Product({
-    name: 'Sample name',
-    price: 0,
+    name: name || 'New Artisanal Spice',
+    price: price || 0,
     user: req.user._id,
-    image: '/images/sample.jpg',
-    category: 'Sample category',
-    countInStock: 0,
+    image: image || 'https://images.unsplash.com/photo-1596040033229-a9821ebd058d?q=80&w=800',
+    category: category || 'Whole Spices',
+    countInStock: countInStock || 0,
     numReviews: 0,
-    description: 'Sample description',
-    spiceLevel: 0,
-    origin: 'Sample origin',
+    description: description || 'Premium spice blend from Sri Lanka',
+    spiceLevel: spiceLevel || 1,
+    origin: origin || 'Sri Lanka',
   });
 
   const createdProduct = await product.save();
@@ -77,14 +79,14 @@ const updateProduct = asyncHandler(async (req, res) => {
   const product = await Product.findById(req.params.id);
 
   if (product) {
-    product.name = name;
-    product.price = price;
-    product.description = description;
-    product.image = image;
-    product.category = category;
-    product.countInStock = countInStock;
-    product.spiceLevel = spiceLevel;
-    product.origin = origin;
+    product.name = name || product.name;
+    product.price = price !== undefined ? price : product.price;
+    product.description = description || product.description;
+    product.image = image || product.image;
+    product.category = category || product.category;
+    product.countInStock = countInStock !== undefined ? countInStock : product.countInStock;
+    product.spiceLevel = spiceLevel !== undefined ? spiceLevel : product.spiceLevel;
+    product.origin = origin || product.origin;
 
     const updatedProduct = await product.save();
     res.json(updatedProduct);
