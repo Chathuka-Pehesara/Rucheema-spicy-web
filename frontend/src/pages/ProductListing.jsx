@@ -196,6 +196,49 @@ const ProductListing = () => {
           )}
         </main>
       </div>
+
+      {/* Elite Partner Showcase - High End Trust */}
+      <section className="partners-showcase">
+        <div className="container">
+          <h2 style={{ color: 'var(--color-primary-dark)' }}>Trust of <span style={{ color: 'var(--color-secondary)' }}>Elite Institutions</span></h2>
+          <div className="partners-categories-grid">
+            
+            <div className="partner-cat-group">
+              <h3 style={{ borderBottomColor: 'var(--color-secondary)' }}>Epicurean Partners</h3>
+              <div className="partner-logos-mini">
+                {["dilmahtea.com", "malibanbiscuits.com", "munchieeats.com"].map(domain => (
+                  <div key={domain} className="partner-mini-card">
+                    <img src={`https://www.google.com/s2/favicons?domain=${domain}&sz=128`} alt="Partner" />
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            <div className="partner-cat-group">
+              <h3 style={{ borderBottomColor: 'var(--color-secondary)' }}>Grand Kitchens</h3>
+              <div className="partner-logos-mini">
+                {["jetwing.com", "aitkenspence.com", "cinnamonhotels.com", "tajhotels.com"].map(domain => (
+                  <div key={domain} className="partner-mini-card">
+                    <img src={`https://www.google.com/s2/favicons?domain=${domain}&sz=128`} alt="Partner" />
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            <div className="partner-cat-group">
+              <h3 style={{ borderBottomColor: 'var(--color-secondary)' }}>Premier Retailers</h3>
+              <div className="partner-logos-mini">
+                {["keellssuper.com", "arpicosupercentre.com", "cargills.com"].map(domain => (
+                  <div key={domain} className="partner-mini-card">
+                    <img src={`https://www.google.com/s2/favicons?domain=${domain}&sz=128`} alt="Partner" />
+                  </div>
+                ))}
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </section>
     </div>
   );
 };

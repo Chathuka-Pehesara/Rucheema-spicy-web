@@ -3,7 +3,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import Hero from '../components/home/Hero';
 import FeaturedProducts from '../components/home/FeaturedProducts';
 import SpiceFinder from '../components/home/SpiceFinder';
-import { ShieldCheck, Truck, RotateCcw, Award, CheckCircle } from 'lucide-react';
+import { ShieldCheck, Truck, RotateCcw, Award, CheckCircle, Globe, Verified, Medal, ChevronLeft, ChevronRight } from 'lucide-react';
 import { SPICES_DATA, CATEGORIES, SUBSCRIPTION_PLANS } from '../utils/mockData';
 import { useAuth } from '../context/AuthContext';
 import { useTranslation } from 'react-i18next';
@@ -22,6 +22,16 @@ const Home = () => {
       alert('Subscription feature coming soon!');
     }
   };
+
+  const PARTNER_LOGOS = [
+    "https://www.google.com/s2/favicons?domain=dilmahtea.com&sz=128",
+    "https://www.google.com/s2/favicons?domain=jetwinghotels.com&sz=128",
+    "https://www.google.com/s2/favicons?domain=aitkenspence.com&sz=128",
+    "https://www.google.com/s2/favicons?domain=cinnamonhotels.com&sz=128",
+    "https://www.google.com/s2/favicons?domain=keellssuper.com&sz=128",
+    "https://www.google.com/s2/favicons?domain=arpicosupercentre.com&sz=128",
+    "https://www.google.com/s2/favicons?domain=tajhotels.com&sz=128"
+  ];
 
   return (
     <div className="home-page">
@@ -49,6 +59,30 @@ const Home = () => {
             <RotateCcw size={32} />
             <h3>Easy Returns</h3>
             <p>Not satisfied? Our 30-day return policy has you covered.</p>
+          </div>
+        </div>
+      </section>
+
+      {/* Certificates Section */}
+      <section className="certificates">
+        <div className="container">
+          <div className="cert-grid">
+            <div className="cert-item">
+              <div className="cert-badge"><Award size={40} /></div>
+              <span>ISO 22000 Certified</span>
+            </div>
+            <div className="cert-item">
+              <div className="cert-badge"><Globe size={40} /></div>
+              <span>Fair Trade Partner</span>
+            </div>
+            <div className="cert-item">
+              <div className="cert-badge"><ShieldCheck size={40} /></div>
+              <span>Organic Certified</span>
+            </div>
+            <div className="cert-item">
+              <div className="cert-badge"><Medal size={40} /></div>
+              <span>GMP Approved</span>
+            </div>
           </div>
         </div>
       </section>
@@ -115,6 +149,27 @@ const Home = () => {
                 </button>
               </div>
             ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Business Partners Section */}
+      <section className="partners">
+        <div className="container">
+          <h2 className="partners-title">Our Partners</h2>
+          <div className="partners-logo-container">
+            <div className="logo-track">
+              {PARTNER_LOGOS.map((logo, index) => (
+                <div className="logo-card" key={`logo-1-${index}`}>
+                  <img src={logo} alt="Partner" />
+                </div>
+              ))}
+              {PARTNER_LOGOS.map((logo, index) => (
+                <div className="logo-card" key={`logo-2-${index}`}>
+                  <img src={logo} alt="Partner" />
+                </div>
+              ))}
+            </div>
           </div>
         </div>
       </section>
