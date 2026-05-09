@@ -141,8 +141,8 @@ const UserIntelligenceTab = ({ userStats, currentUser }) => {
                       onClick={() => setSelectedCity({ city, count, position })}
                       icon={{
                         url: `data:image/svg+xml;charset=UTF-8,${encodeURIComponent(pulseSvg)}`,
-                        scaledSize: { width: 40, height: 40 },
-                        anchor: { x: 20, y: 20 }
+                        scaledSize: new window.google.maps.Size(40, 40),
+                        anchor: new window.google.maps.Point(20, 20)
                       }}
                     />
                   );
@@ -261,11 +261,13 @@ const Dashboard = () => {
     try {
       setLoading(true);
       const res = await fetch(`${import.meta.env.VITE_API_URL}/api/products`);
-      const data = await res.json();
-      setProducts(data);
-      setLoading(false);
+      if (res.ok) {
+        const data = await res.json();
+        setProducts(data);
+      }
     } catch (err) {
       console.error('Fetch products error:', err);
+    } finally {
       setLoading(false);
     }
   };

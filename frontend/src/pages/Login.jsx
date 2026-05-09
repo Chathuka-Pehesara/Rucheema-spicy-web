@@ -9,13 +9,13 @@ const Login = () => {
   const navigate = useNavigate();
   const location = useLocation();
   
-  const [role, setRole] = useState('user'); // user, admin, owner
   const [email, setEmail] = useState(location.state?.email || '');
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState('');
   const [successMessage, setSuccessMessage] = useState('');
   const [isLoading, setIsLoading] = useState(false);
+  const [focusedField, setFocusedField] = useState(null);
 
   const from = location.state?.from?.pathname || '/';
 
@@ -52,40 +52,65 @@ const Login = () => {
       
       <div className="login-card">
         <div className="login-brand-luxury">
-          <div className="brand-logo-anim">
-            <Sparkles className="sparkle-icon" size={24} />
-            <ShieldCheck size={48} className="main-logo" />
+          <div className="mascot-container">
+            <svg 
+              className="chili-mascot"
+              width="120" height="120" 
+              viewBox="0 0 100 100"
+              style={{ transition: 'all 0.4s ease' }}
+            >
+              {/* Stem */}
+              <path 
+                d="M 50 15 Q 50 0 65 5" 
+                stroke="#15803d" 
+                strokeWidth="6" 
+                strokeLinecap="round" 
+                fill="none" 
+              />
+              {/* Body */}
+              <path 
+                d="M 50 15 C 75 15 85 55 70 85 C 60 100 40 100 30 85 C 15 55 25 15 50 15 Z" 
+                fill={focusedField === 'password' ? '#22c55e' : '#ef4444'} 
+                style={{ transition: 'fill 0.5s ease' }}
+              />
+              
+              {/* Eyes */}
+              {focusedField === 'password' ? (
+                <>
+                  <path d="M 35 45 Q 40 38 45 45" stroke="#fff" strokeWidth="3" strokeLinecap="round" fill="none" />
+                  <path d="M 55 45 Q 60 38 65 45" stroke="#fff" strokeWidth="3" strokeLinecap="round" fill="none" />
+                </>
+              ) : (
+                <>
+                  <circle 
+                    cx={focusedField === 'email' ? 38 : 40} 
+                    cy={focusedField === 'email' ? 48 : 42} 
+                    r="4" fill="#fff" 
+                    style={{ transition: 'all 0.2s ease' }}
+                  />
+                  <circle 
+                    cx={focusedField === 'email' ? 58 : 60} 
+                    cy={focusedField === 'email' ? 48 : 42} 
+                    r="4" fill="#fff" 
+                    style={{ transition: 'all 0.2s ease' }}
+                  />
+                </>
+              )}
+
+              {/* Mouth */}
+              {focusedField === 'password' ? (
+                <circle cx="50" cy="58" r="3" fill="#fff" />
+              ) : focusedField === 'email' ? (
+                <path d="M 45 60 Q 50 65 55 60" stroke="#fff" strokeWidth="3" strokeLinecap="round" fill="none" />
+              ) : (
+                <path d="M 40 55 Q 50 65 60 55" stroke="#fff" strokeWidth="3" strokeLinecap="round" fill="none" />
+              )}
+            </svg>
           </div>
-          <h1>Rucheema <span>Executive</span></h1>
-          <p>Access your premium catalog and dashboard</p>
+          <h1>Rucheema <span>Login</span></h1>
+          <p>Access your premium account</p>
         </div>
 
-        <div className="role-selector-premium">
-          <button 
-            type="button"
-            className={`role-btn ${role === 'user' ? 'active' : ''}`}
-            onClick={() => setRole('user')}
-          >
-            <Users size={18} />
-            <span>Customer</span>
-          </button>
-          <button 
-            type="button"
-            className={`role-btn ${role === 'admin' ? 'active' : ''}`}
-            onClick={() => setRole('admin')}
-          >
-            <Briefcase size={18} />
-            <span>Admin</span>
-          </button>
-          <button 
-            type="button"
-            className={`role-btn ${role === 'owner' ? 'active' : ''}`}
-            onClick={() => setRole('owner')}
-          >
-            <User size={18} />
-            <span>Owner</span>
-          </button>
-        </div>
 
         <form className="login-form-premium" onSubmit={handleSubmit}>
           {error && <div className="login-error-premium">{error}</div>}
@@ -97,9 +122,11 @@ const Login = () => {
               <Mail className="input-icon" size={18} />
               <input
                 type="email"
-                placeholder={role === 'admin' ? 'admin@rucheema.com' : 'your@email.com'}
+                placeholder="your@email.com"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
+                onFocus={() => setFocusedField('email')}
+                onBlur={() => setFocusedField(null)}
                 required
               />
             </div>
@@ -114,6 +141,8 @@ const Login = () => {
                 placeholder="••••••••"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
+                onFocus={() => setFocusedField('password')}
+                onBlur={() => setFocusedField(null)}
                 required
               />
               <button

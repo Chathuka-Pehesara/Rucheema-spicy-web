@@ -41,7 +41,7 @@ const Register = () => {
   const SL_CITIES = ['Colombo', 'Dehiwala', 'Kotte', 'Kandy', 'Galle', 'Jaffna', 'Negombo', 'Anuradhapura', 'Ratnapura', 'Matara'];
   const COUNTRIES = ['Sri Lanka', 'United Kingdom', 'United States', 'Australia', 'Canada', 'Other'];
 
-  const [role, setRole] = useState('user');
+  const [role] = useState('user');
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -107,32 +107,7 @@ const Register = () => {
           <p>Create your account to start your artisanal journey</p>
         </div>
 
-        <div className="role-selector-premium">
-          <button 
-            type="button"
-            className={`role-btn ${role === 'user' ? 'active' : ''}`}
-            onClick={() => setRole('user')}
-          >
-            <Users size={18} />
-            <span>Customer</span>
-          </button>
-          <button 
-            type="button"
-            className={`role-btn ${role === 'admin' ? 'active' : ''}`}
-            onClick={() => setRole('admin')}
-          >
-            <Briefcase size={18} />
-            <span>Admin</span>
-          </button>
-          <button 
-            type="button"
-            className={`role-btn ${role === 'owner' ? 'active' : ''}`}
-            onClick={() => setRole('owner')}
-          >
-            <User size={18} />
-            <span>Owner</span>
-          </button>
-        </div>
+
 
         <form className="register-form-premium" onSubmit={handleSubmit}>
           {error && <div className="error-message">{error}</div>}

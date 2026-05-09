@@ -8,6 +8,22 @@ const generateToken = require('../utils/generateToken');
 const authUser = asyncHandler(async (req, res) => {
   const { email, password } = req.body;
 
+  // Auto-seed Admin if they use the hardcoded credentials and don't exist
+  if (email === 'admin@rucheema.com' && password === 'admin123') {
+    const adminExists = await User.findOne({ email });
+    if (!adminExists) {
+      await User.create({ name: 'Super Admin', email: 'admin@rucheema.com', password: 'admin123', role: 'admin' });
+    }
+  }
+
+  // Auto-seed Owner if they use the hardcoded credentials and don't exist
+  if (email === 'owner@rucheema.com' && password === 'owner123') {
+    const ownerExists = await User.findOne({ email });
+    if (!ownerExists) {
+      await User.create({ name: 'Business Owner', email: 'owner@rucheema.com', password: 'owner123', role: 'owner' });
+    }
+  }
+
   const user = await User.findOne({ email });
 
   if (user && (await user.matchPassword(password))) {

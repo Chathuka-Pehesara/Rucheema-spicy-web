@@ -60,11 +60,13 @@ const Admin = () => {
     try {
       setLoading(true);
       const res = await fetch(`${import.meta.env.VITE_API_URL}/api/products`);
-      const data = await res.json();
-      setProductList(data);
-      setLoading(false);
+      if (res.ok) {
+        const data = await res.json();
+        setProductList(data);
+      }
     } catch (err) {
       console.error('Admin fetch products error:', err);
+    } finally {
       setLoading(false);
     }
   };
