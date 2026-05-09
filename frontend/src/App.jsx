@@ -6,6 +6,7 @@ import Home from './pages/Home';
 import ProductListing from './pages/ProductListing';
 import ProductDetail from './pages/ProductDetail';
 import Cart from './pages/Cart';
+import Payment from './pages/Payment';
 import Dashboard from './pages/Dashboard';
 import Admin from './pages/Admin';
 import Business from './pages/Business';
@@ -25,11 +26,12 @@ import { AuthProvider } from './context/AuthContext';
 function AppContent() {
   const location = useLocation();
   const isDashboard = location.pathname === '/admin' || location.pathname === '/dashboard';
+  const isPayment = location.pathname === '/payment';
 
   return (
     <div className="app">
       <CustomCursor />
-      {!isDashboard && <Header />}
+      {!isDashboard && !isPayment && <Header />}
       <main>
         <Routes>
           <Route path="/" element={<Home />} />
@@ -37,6 +39,7 @@ function AppContent() {
           <Route path="/collections" element={<ProductListing />} />
           <Route path="/product/:id" element={<ProductDetail />} />
           <Route path="/cart" element={<Cart />} />
+          <Route path="/payment" element={<Payment />} />
           <Route path="/business" element={<Business />} />
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
@@ -79,8 +82,8 @@ function AppContent() {
           <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>
       </main>
-      {!isDashboard && <AIChatbot />}
-      {!isDashboard && <Footer />}
+      {!isDashboard && !isPayment && <AIChatbot />}
+      {!isDashboard && !isPayment && <Footer />}
     </div>
   );
 }

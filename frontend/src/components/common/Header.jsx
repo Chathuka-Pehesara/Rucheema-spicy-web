@@ -4,6 +4,8 @@ import { ShoppingCart, Search, User, Menu, X, Heart, LogOut, LayoutDashboard, Sh
 import { useShop } from '../../context/ShopContext';
 import { useAuth } from '../../context/AuthContext';
 import { useTranslation } from 'react-i18next';
+import brandLogo from '../../assets/brand-logo-transparent.png';
+import mainLogo from '../../assets/main-logo-transparent.png';
 import './Header.css';
 
 const Header = () => {
@@ -63,8 +65,8 @@ const Header = () => {
           {isMobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
         </div>
 
-        <Link to="/" className="logo notranslate">
-          RICHEEMA<span>SPICY</span>
+        <Link to="/" className="logo-container notranslate">
+          <img src={brandLogo} alt="Rucheema Spicy" className="brand-logo-img-header" />
         </Link>
 
         <nav className={`nav-menu ${isMobileMenuOpen ? 'active' : ''}`}>

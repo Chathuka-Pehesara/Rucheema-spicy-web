@@ -3,7 +3,6 @@
   top: 0;
   left: 0;
   width: 100%;
-  height: var(--header-height);
   display: flex;
   align-items: center;
   z-index: 1000;
@@ -14,7 +13,6 @@
 .header.scrolled {
   background-color: rgba(255, 253, 245, 0.95);
   backdrop-filter: blur(10px);
-  height: 70px;
   box-shadow: var(--shadow-md);
 }
 
@@ -23,19 +21,48 @@
   justify-content: space-between;
   align-items: center;
   width: 100%;
+  min-height: 130px; /* Increased to fit the massive logo */
+  padding: 10px 0;
+  transition: min-height 0.3s ease, padding 0.3s ease;
 }
 
-.logo {
-  font-family: var(--font-heading);
-  font-size: 1.8rem;
-  font-weight: 800;
-  letter-spacing: 2px;
-  color: var(--color-primary-dark);
+.header.scrolled .header-container {
+  min-height: 90px;
+  padding: 5px 0;
 }
 
-.logo span {
-  color: var(--color-secondary-dark);
-  font-weight: 400;
+.logo-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+}
+
+@keyframes spicyHeartbeat {
+  0% { transform: scale(1); filter: drop-shadow(0 2px 5px rgba(0,0,0,0.1)); }
+  8% { transform: scale(1.12) rotate(-3deg); filter: drop-shadow(0 0 25px rgba(255, 65, 108, 0.8)); }
+  14% { transform: scale(0.98) rotate(0deg); filter: drop-shadow(0 0 10px rgba(255, 120, 0, 0.5)); }
+  22% { transform: scale(1.18) rotate(3deg); filter: drop-shadow(0 0 40px rgba(255, 30, 0, 0.9)); }
+  32% { transform: scale(1) rotate(0deg); filter: drop-shadow(0 2px 5px rgba(0,0,0,0.1)); }
+  100% { transform: scale(1); filter: drop-shadow(0 2px 5px rgba(0,0,0,0.1)); }
+}
+
+@keyframes spicyHoverFlame {
+  0% { transform: scale(1.1) rotate(-1deg); filter: drop-shadow(0 0 20px rgba(255, 65, 108, 0.7)); }
+  50% { transform: scale(1.12) rotate(1deg); filter: drop-shadow(0 0 30px rgba(255, 150, 0, 0.9)); }
+  100% { transform: scale(1.1) rotate(-1deg); filter: drop-shadow(0 0 20px rgba(255, 65, 108, 0.7)); }
+}
+
+.brand-logo-img-header {
+  height: 110px;
+  width: auto;
+  object-fit: contain;
+  transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275), filter 0.4s ease;
+  animation: spicyHeartbeat 4s cubic-bezier(0.25, 0.46, 0.45, 0.94) infinite;
+}
+
+.brand-logo-img-header:hover {
+  animation: spicyHoverFlame 0.8s ease-in-out infinite;
 }
 
 .nav-menu ul {
@@ -142,9 +169,10 @@
     display: block;
   }
   
-  .logo {
-    font-size: 1.4rem;
+  .brand-logo-img-header {
+    height: 80px;
   }
+
 }
 
 /* User Profile Styles */

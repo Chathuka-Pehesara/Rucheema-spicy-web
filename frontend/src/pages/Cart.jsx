@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
-import { Trash2, Plus, Minus, ArrowLeft, ShoppingBag, CreditCard, ShieldCheck, CheckCircle, Package } from 'lucide-react';
+import { Link, useNavigate } from 'react-router-dom';
+import { Trash2, Plus, Minus, ArrowLeft, ShoppingBag, ShieldCheck, Package } from 'lucide-react';
 import { useShop } from '../context/ShopContext';
 import { useAuth } from '../context/AuthContext';
 import { calculateDistance, calculateDeliveryFee, calculateShipmentFee } from '../utils/shippingUtils';
@@ -9,7 +9,8 @@ import './Cart.css';
 const Cart = () => {
   const { cart, removeFromCart, updateQuantity, cartTotal, clearCart } = useShop();
   const { user } = useAuth();
-  const [checkoutStep, setCheckoutStep] = useState('cart'); // 'cart', 'payment', 'success'
+  const navigate = useNavigate();
+  const [checkoutStep, setCheckoutStep] = useState('cart'); // 'cart' | 'success'
   const [settings, setSettings] = useState(null);
   const [shippingFee, setShippingFee] = useState(0);
 
@@ -53,55 +54,22 @@ const Cart = () => {
   const tax = subtotal * 0.08;
   const total = subtotal + shipping + tax;
 
-  const handleProcessPayment = async () => {
-    setCheckoutStep('processing');
-    
-    try {
-      const orderData = {
+  const handleProceedToPayment = () => {
+    navigate('/payment', {
+      state: {
+        total,
+        subtotal,
+        tax,
+        shipping,
         orderItems: cart.map(item => ({
           name: item.name,
           qty: item.quantity,
-          image: item.image,
           price: item.price,
+          image: item.image,
           product: item.id
-        })),
-        shippingAddress: {
-          address: user.town,
-          city: user.city,
-          country: user.country,
-          postalCode: '00000'
-        },
-        paymentMethod: 'Credit Card',
-        itemsPrice: subtotal,
-        taxPrice: tax,
-        shippingPrice: shipping,
-        totalPrice: total,
-      };
-
-      const response = await fetch(`${import.meta.env.VITE_API_URL}/api/orders`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${user.token}`,
-        },
-        body: JSON.stringify(orderData),
-      });
-
-      if (response.ok) {
-        setTimeout(() => {
-          setCheckoutStep('success');
-          clearCart();
-        }, 1500);
-      } else {
-        const error = await response.json();
-        alert(`Order failed: ${error.message}`);
-        setCheckoutStep('payment');
+        }))
       }
-    } catch (err) {
-      console.error(err);
-      alert('An error occurred during payment processing.');
-      setCheckoutStep('payment');
-    }
+    });
   };
 
   if (cart.length === 0 && checkoutStep !== 'success') {
@@ -226,7 +194,7 @@ const Cart = () => {
                     <span>${total.toFixed(2)}</span>
                   </div>
                 </div>
-                <button className="btn-checkout-gold" onClick={() => setCheckoutStep('payment')}>
+                <button className="btn-checkout-gold" onClick={handleProceedToPayment}>
                   Proceed to Secure Checkout
                 </button>
                 <div className="secure-footer">
@@ -234,83 +202,6 @@ const Cart = () => {
                 </div>
               </aside>
             </div>
-          </div>
-        )}
-
-        {checkoutStep === 'payment' && (
-          <div className="payment-gateway-luxury animate-scale-in">
-             <div className="payment-modal-card">
-                <div className="payment-header">
-                   <h2>Secure <span>Vault</span></h2>
-                   <p>Enter your payment credentials for secure processing</p>
-                </div>
-                <div className="payment-form-grid">
-                   <div className="card-preview-glass">
-                      <div className="chip"></div>
-                      <div className="card-number">•••• •••• •••• 4242</div>
-                      <div className="card-info">
-                         <div>
-                            <small>Card Holder</small>
-                            <p>EXECUTIVE CLIENT</p>
-                         </div>
-                         <div>
-                            <small>Expires</small>
-                            <p>12/28</p>
-                         </div>
-                      </div>
-                   </div>
-                   <div className="payment-inputs">
-                      <div className="input-group-luxury">
-                         <label>Cardholder Designation</label>
-                         <input type="text" placeholder="Johnathan Doe" />
-                      </div>
-                      <div className="input-group-luxury">
-                         <label>Secure Card Number</label>
-                         <input type="text" placeholder="XXXX XXXX XXXX XXXX" />
-                      </div>
-                      <div className="input-row-luxury">
-                         <div className="input-group-luxury">
-                            <label>Expiry</label>
-                            <input type="text" placeholder="MM/YY" />
-                         </div>
-                         <div className="input-group-luxury">
-                            <label>CVV/CVC</label>
-                            <input type="password" placeholder="•••" />
-                         </div>
-                      </div>
-                      <button className="btn-pay-now" onClick={handleProcessPayment}>
-                        Authorize ${total.toFixed(2)} Payment
-                      </button>
-                      <button className="btn-cancel-payment" onClick={() => setCheckoutStep('cart')}>
-                        Discard & Return to Basket
-                      </button>
-                   </div>
-                </div>
-             </div>
-          </div>
-        )}
-
-        {checkoutStep === 'processing' && (
-          <div className="processing-overlay">
-             <div className="spinner-luxury"></div>
-             <h3>Verifying with Global Banks...</h3>
-             <p>Securing your artisanal transaction</p>
-          </div>
-        )}
-
-        {checkoutStep === 'success' && (
-          <div className="success-view-luxury animate-slide-up">
-             <div className="success-card-gold">
-                <div className="success-icon-wrapper">
-                   <CheckCircle size={80} className="check-gold" />
-                </div>
-                <h1>Order <span>Sanctified</span></h1>
-                <p>Your artisanal spices are being prepared for dispatch. A confirmation has been sent to your executive email.</p>
-                <div className="success-actions">
-                   <Link to="/dashboard" className="btn-luxury-outline"><Package size={18} /> Track Dispatch</Link>
-                   <Link to="/" className="btn-luxury-gold">Return to Home</Link>
-                </div>
-             </div>
           </div>
         )}
       </div>
