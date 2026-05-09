@@ -374,33 +374,75 @@
   align-items: center;
   text-align: center;
   max-width: 150px;
+  text-decoration: none;
+  color: var(--color-text);
+  cursor: pointer;
 }
 
 .cert-badge {
-  width: 80px;
-  height: 80px;
-  background: var(--color-bg-alt);
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  width: 90px;
+  height: 90px;
+  position: relative;
   margin-bottom: 1rem;
-  border: 2px solid var(--color-secondary);
-  color: var(--color-secondary-dark);
-  transition: var(--transition-smooth);
+  transform-style: preserve-3d;
+  transition: transform 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
 }
 
 .cert-item:hover .cert-badge {
-  transform: rotateY(180deg);
-  background: var(--color-secondary-light);
-  color: var(--color-primary-dark);
+  transform: rotateY(180deg) scale(1.15);
 }
 
-.cert-item span {
+.cert-badge::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; width: 100%; height: 100%;
+  background: var(--color-bg-alt);
+  border-radius: 50%;
+  border: 2px solid var(--color-secondary);
+  backface-visibility: hidden;
+  z-index: 1;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+}
+
+.cert-icon {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  backface-visibility: hidden;
+  color: var(--color-secondary-dark);
+  z-index: 2;
+}
+
+.cert-name-hover {
+  position: absolute;
+  top: 0; left: 0; width: 100%; height: 100%;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--color-secondary), #ff4b2b);
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transform: rotateY(180deg);
+  backface-visibility: hidden;
+  font-weight: 800;
+  font-size: 0.95rem;
+  text-align: center;
+  box-shadow: 0 10px 20px rgba(255, 65, 108, 0.3);
+  z-index: 3;
+  padding: 5px;
+}
+
+.cert-item span:not(.cert-name-hover) {
   font-size: 0.85rem;
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 1px;
+  transition: color 0.3s ease;
+}
+
+.cert-item:hover span:not(.cert-name-hover) {
+  color: var(--color-secondary);
 }
 
 /* Partners Section */

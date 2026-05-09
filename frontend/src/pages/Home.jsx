@@ -66,23 +66,31 @@ const Home = () => {
       {/* Certificates Section */}
       <section className="certificates">
         <div className="container">
+          <div className="section-header center" style={{marginBottom: '3rem'}}>
+            <h2>Global <span>Certifications</span></h2>
+          </div>
           <div className="cert-grid">
-            <div className="cert-item">
-              <div className="cert-badge"><Award size={40} /></div>
-              <span>ISO 22000 Certified</span>
-            </div>
-            <div className="cert-item">
-              <div className="cert-badge"><Globe size={40} /></div>
-              <span>Fair Trade Partner</span>
-            </div>
-            <div className="cert-item">
-              <div className="cert-badge"><ShieldCheck size={40} /></div>
-              <span>Organic Certified</span>
-            </div>
-            <div className="cert-item">
-              <div className="cert-badge"><Medal size={40} /></div>
-              <span>GMP Approved</span>
-            </div>
+            <a href="/certificates/CCFS96.pdf" target="_blank" rel="noreferrer" className="cert-item">
+              <div className="cert-badge">
+                <ShieldCheck size={40} className="cert-icon" />
+                <span className="cert-name-hover">ISO 22000</span>
+              </div>
+              <span>Food Safety Standard</span>
+            </a>
+            <a href="/certificates/CCGMP96.pdf" target="_blank" rel="noreferrer" className="cert-item">
+              <div className="cert-badge">
+                <Medal size={40} className="cert-icon" />
+                <span className="cert-name-hover">GMP</span>
+              </div>
+              <span>Good Manufacturing</span>
+            </a>
+            <a href="/certificates/CCHCP96.pdf" target="_blank" rel="noreferrer" className="cert-item">
+              <div className="cert-badge">
+                <Award size={40} className="cert-icon" />
+                <span className="cert-name-hover">HACCP</span>
+              </div>
+              <span>Hazard Analysis</span>
+            </a>
           </div>
         </div>
       </section>
