@@ -201,36 +201,17 @@ const ProductListing = () => {
       <section className="partners-showcase">
         <div className="container">
           <h2 style={{ color: 'var(--color-primary-dark)' }}>Trust of <span style={{ color: 'var(--color-secondary)' }}>Elite Institutions</span></h2>
-          <div className="partners-categories-grid">
+          <div className="partners-categories-grid" style={{ display: 'flex', justifyContent: 'center' }}>
             
-            <div className="partner-cat-group">
-              <h3 style={{ borderBottomColor: 'var(--color-secondary)' }}>Epicurean Partners</h3>
-              <div className="partner-logos-mini">
-                {["dilmahtea.com", "malibanbiscuits.com", "munchieeats.com"].map(domain => (
-                  <div key={domain} className="partner-mini-card">
-                    <img src={`https://www.google.com/s2/favicons?domain=${domain}&sz=128`} alt="Partner" />
-                  </div>
-                ))}
-              </div>
-            </div>
-
-            <div className="partner-cat-group">
-              <h3 style={{ borderBottomColor: 'var(--color-secondary)' }}>Grand Kitchens</h3>
-              <div className="partner-logos-mini">
-                {["jetwing.com", "aitkenspence.com", "cinnamonhotels.com", "tajhotels.com"].map(domain => (
-                  <div key={domain} className="partner-mini-card">
-                    <img src={`https://www.google.com/s2/favicons?domain=${domain}&sz=128`} alt="Partner" />
-                  </div>
-                ))}
-              </div>
-            </div>
-
-            <div className="partner-cat-group">
-              <h3 style={{ borderBottomColor: 'var(--color-secondary)' }}>Premier Retailers</h3>
-              <div className="partner-logos-mini">
-                {["keellssuper.com", "arpicosupercentre.com", "cargills.com"].map(domain => (
-                  <div key={domain} className="partner-mini-card">
-                    <img src={`https://www.google.com/s2/favicons?domain=${domain}&sz=128`} alt="Partner" />
+            <div className="partner-cat-group" style={{ width: '100%', maxWidth: '600px', textAlign: 'center' }}>
+              <h3 style={{ borderBottomColor: 'var(--color-secondary)', display: 'inline-block' }}>Our Valued Partners</h3>
+              <div className="partner-logos-mini" style={{ justifyContent: 'center' }}>
+                {[
+                  { name: "Rasawimana Holdings", logo: "https://rasawimanaholdings.com/wp-content/uploads/2023/11/Untitled-21.png" },
+                  { name: "Soba Caterers", logo: "https://www.sobacaterers.lk/img/logo.png" }
+                ].map(partner => (
+                  <div key={partner.name} className="partner-mini-card">
+                    <img src={partner.logo} alt={partner.name} />
                   </div>
                 ))}
               </div>

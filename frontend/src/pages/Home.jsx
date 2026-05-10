@@ -24,13 +24,8 @@ const Home = () => {
   };
 
   const PARTNER_LOGOS = [
-    "https://www.google.com/s2/favicons?domain=dilmahtea.com&sz=128",
-    "https://www.google.com/s2/favicons?domain=jetwinghotels.com&sz=128",
-    "https://www.google.com/s2/favicons?domain=aitkenspence.com&sz=128",
-    "https://www.google.com/s2/favicons?domain=cinnamonhotels.com&sz=128",
-    "https://www.google.com/s2/favicons?domain=keellssuper.com&sz=128",
-    "https://www.google.com/s2/favicons?domain=arpicosupercentre.com&sz=128",
-    "https://www.google.com/s2/favicons?domain=tajhotels.com&sz=128"
+    "https://rasawimanaholdings.com/wp-content/uploads/2023/11/Untitled-21.png",
+    "https://www.sobacaterers.lk/img/logo.png"
   ];
 
   return (
@@ -167,15 +162,14 @@ const Home = () => {
           <h2 className="partners-title">Our Partners</h2>
           <div className="partners-logo-container">
             <div className="logo-track">
-              {PARTNER_LOGOS.map((logo, index) => (
-                <div className="logo-card" key={`logo-1-${index}`}>
-                  <img src={logo} alt="Partner" />
-                </div>
-              ))}
-              {PARTNER_LOGOS.map((logo, index) => (
-                <div className="logo-card" key={`logo-2-${index}`}>
-                  <img src={logo} alt="Partner" />
-                </div>
+              {[...Array(10)].map((_, groupIndex) => (
+                <React.Fragment key={`group-${groupIndex}`}>
+                  {PARTNER_LOGOS.map((logo, index) => (
+                    <div className="logo-card" key={`logo-${groupIndex}-${index}`}>
+                      <img src={logo} alt="Partner" />
+                    </div>
+                  ))}
+                </React.Fragment>
               ))}
             </div>
           </div>
