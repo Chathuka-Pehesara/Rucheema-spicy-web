@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next';
 import './Hero.css';
 import heroBg from '../../assets/hero-bg.png';
 
-const Hero = () => {
+const Hero = ({ onStartTour }) => {
   const { t } = useTranslation();
   return (
     <section className="hero">
@@ -18,8 +18,9 @@ const Hero = () => {
           Hand-selected, ethically sourced, and ground to perfection. 
           Elevate your culinary journey with Richeema's premium collection.
         </p>
-        <div className="hero-btns fade-in" style={{ animationDelay: '0.4s' }}>
-          <Link to="/collections" className="btn-premium">{t('hero.cta')}</Link>
+        <div className="hero-btns fade-in" style={{ animationDelay: '0.4s', display: 'flex', gap: '1rem' }}>
+          <button className="btn-premium" onClick={onStartTour}>Get Started</button>
+          <Link to="/collections" className="btn-outline" style={{ borderColor: 'white', color: 'white' }}>Explore Collections</Link>
         </div>
       </div>
     </section>

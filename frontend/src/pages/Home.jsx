@@ -1,8 +1,9 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import Hero from '../components/home/Hero';
 import FeaturedProducts from '../components/home/FeaturedProducts';
 import SpiceFinder from '../components/home/SpiceFinder';
+import GuidedTour from '../components/common/GuidedTour';
 import { ShieldCheck, Truck, RotateCcw, Award, CheckCircle, Globe, Verified, Medal, ChevronLeft, ChevronRight } from 'lucide-react';
 import { SPICES_DATA, CATEGORIES, SUBSCRIPTION_PLANS } from '../utils/mockData';
 import { useAuth } from '../context/AuthContext';
@@ -13,6 +14,7 @@ const Home = () => {
   const { user } = useAuth();
   const { t } = useTranslation();
   const navigate = useNavigate();
+  const [isTourActive, setIsTourActive] = useState(false);
 
   const handleSubscribe = () => {
     if (!user) {
@@ -30,7 +32,8 @@ const Home = () => {
 
   return (
     <div className="home-page">
-      <Hero />
+      <GuidedTour isActive={isTourActive} onClose={() => setIsTourActive(false)} />
+      <Hero onStartTour={() => setIsTourActive(true)} />
       
       {/* Brand Trust Section */}
       <section className="brand-trust">
